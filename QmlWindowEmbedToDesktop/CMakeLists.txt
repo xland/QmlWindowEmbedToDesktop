@@ -15,6 +15,8 @@ qt_standard_project_setup()
 
 set(PROJECT_SOURCES
     main.cpp
+    EmbedHelper.h
+    EmbedHelper.cpp
 )
 
 if(QT_VERSION VERSION_LESS 6.2)

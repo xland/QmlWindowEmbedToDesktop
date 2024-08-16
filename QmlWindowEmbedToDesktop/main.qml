@@ -10,14 +10,19 @@ Window {
     height: 480
     title: "QtEmbededWindow"
     property point winPos: Qt.point(0, 0)
+    FontLoader {
+        id: fontLoader
+        source: "fa-solid-900.ttf"
+    }
     Rectangle {
         id: bg
         x: 0
         y: 0
         width: parent.width
         height: parent.height
-        radius: [0, 6, 0, 0]
-        color: "#ccbbbbbb"  
+        radius: 6
+        color: "#ddbbbbbb"  
+        antialiasing:true
         TitleBar {
             id: titleBar            
             width: parent.width

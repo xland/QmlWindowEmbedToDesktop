@@ -5,10 +5,6 @@ Rectangle {
     y: 0
     height: 28
     color: "#00000000"
-    FontLoader {
-        id: faLoader
-        source: "fa-solid-900.ttf"
-    }
     Rectangle {
         id: settingBtn
         y: 0
@@ -16,10 +12,11 @@ Rectangle {
         width: 32
         anchors.right: parent.right
         color: "#00000000"
-        radius: [0, 6, 0, 0]
+        topRightRadius: bg.radius
+        antialiasing:true
         Text{
             color:"#ff000000";
-            font.family: faLoader.name
+            font.family: fontLoader.name
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -43,10 +40,9 @@ Rectangle {
         width: 32
         anchors.right: settingBtn.left
         color: "#00000000"
-        radius: [0, 6, 0, 0]
         Text{
             color:"#ff000000";
-            font.family: faLoader.name
+            font.family: fontLoader.name
             font.pixelSize: 12
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
