@@ -31,6 +31,8 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         QML_FILES
             main.qml
             TitleBar.qml
+        RESOURCES
+            fa-solid-900.ttf
     )
 endif()
 
