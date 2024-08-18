@@ -20,7 +20,7 @@ Window {
         y: 0
         width: parent.width
         height: parent.height
-        radius: 6
+        radius: 4
         color: "#ddbbbbbb"  
         antialiasing:true
         TitleBar {
