@@ -33,8 +33,13 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         QML_FILES
             main.qml
             TitleBar.qml
+            CalendarHeader.qml
+            WeekHeader.qml
+            CalendarBody.qml
+            SwitchBtn.qml
         RESOURCES
             fa-solid-900.ttf
+            Calendar.js
     )
 endif()
 

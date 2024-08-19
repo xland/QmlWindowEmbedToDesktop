@@ -1,5 +1,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <qquickwindow.h>
+#include <qwindow.h>
+#include <EmbedHelper.h>
+
 
 int main(int argc, char *argv[])
 {
@@ -12,5 +16,9 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
+    auto winObj = engine.rootObjects().at(0);
+    QQuickWindow* window = static_cast<QQuickWindow*>(winObj);
+    auto hwnd = (HWND)window->winId();
+    //EmbedHelper::Embed(hwnd);
     return app.exec();
 }

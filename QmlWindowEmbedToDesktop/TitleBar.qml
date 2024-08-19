@@ -3,19 +3,21 @@
 Rectangle {
     x: 0
     y: 0
-    height: 28
+    height: 48
+    width:bg.width
     color: "#00000000"
     Rectangle {
         id: settingBtn
-        y: 0
-        height: parent.height
-        width: 32
+        y:10
+        height: 28
+        width: 28
         anchors.right: parent.right
+        anchors.rightMargin:10
+        radius: 2
         color: "#00000000"
-        topRightRadius: bg.radius
         antialiasing:true
         Text{
-            color:"#ff000000";
+            color:"#ff646A73";
             font.family: fontLoader.name
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
@@ -26,7 +28,7 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                parent.color = "#66000000";
+                parent.color = "#28000000";
             }
             onExited: {
                 parent.color = "#00000000";
@@ -35,13 +37,15 @@ Rectangle {
     }
     Rectangle {
         id: pinBtn
-        y: 0
-        height: parent.height
-        width: 32
+        y: 10
+        height: 28
+        width: 28
         anchors.right: settingBtn.left
+        anchors.rightMargin:10
+        radius: 2
         color: "#00000000"
         Text{
-            color:"#ff000000";
+            color:"#ff646A73";
             font.family: fontLoader.name
             font.pixelSize: 12
             anchors.horizontalCenter: parent.horizontalCenter
@@ -52,7 +56,7 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                parent.color = "#66000000";
+                parent.color = "#28000000";
             }
             onExited: {
                 parent.color = "#00000000";
