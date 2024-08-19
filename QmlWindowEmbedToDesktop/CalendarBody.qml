@@ -17,7 +17,7 @@ Repeater {
             text:modelData.day
         }
         Text{
-            color:"#ff000000"
+            color:"#ff4C4F54"
             anchors.top: dayNumText.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: 12

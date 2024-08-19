@@ -22,7 +22,7 @@ Window {
         width: parent.width
         height: parent.height
         radius: 4
-        color: "#66DDDDDD"  
+        color: "#99FFFFFF"  
         antialiasing:true
         TitleBar {
             id: titleBar
