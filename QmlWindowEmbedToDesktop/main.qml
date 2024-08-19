@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Window
 
-
 Window {
     id:root
     flags: Qt.ToolTip | Qt.FramelessWindowHint
@@ -24,6 +23,10 @@ Window {
         radius: 4
         color: "#99FFFFFF"  
         antialiasing:true
+        border {
+            width: 0.5
+            color: "#88797B7F"
+        }
         TitleBar {
             id: titleBar
         }
@@ -33,11 +36,11 @@ Window {
         Rectangle {
             id:body
             anchors.top: calendarHeader.bottom
+            anchors.topMargin:6
             anchors.left: bg.left
             anchors.right: bg.right
-            anchors.topMargin:6
-            anchors.leftMargin:10
-            anchors.rightMargin:10
+            anchors.leftMargin:14
+            anchors.rightMargin:14
             WeekHeader {
                 id: weekHeader
             }  

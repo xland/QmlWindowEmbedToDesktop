@@ -1,6 +1,7 @@
-let dateArr = [];
+let curDate;
 
-let getOneMonthDate = (tarDate)=>{
+let getOneMonthDate = (tarDate) => {
+    curDate = tarDate;
     let result = [];
     let year = tarDate.getFullYear();
     let month = tarDate.getMonth();

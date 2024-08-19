@@ -7,17 +7,17 @@ Rectangle {
     anchors.topMargin: 3
     width:270
     height:40
-    Rectangle {
-        id:goPreMonthBtn
+    component IconBtn: Rectangle {
+        property string iconCode:"\uf053"
         color: "#00000000"
-        anchors.left: parent.left
         anchors.top: parent.top
         anchors.topMargin:4
         width:32
         height:32
         radius:32
+        signal clicked()
         border {
-            width: 1
+            width: 0.6
             color: "#ff797B7F"
         }
         Text{
@@ -26,7 +26,7 @@ Rectangle {
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            text: "\uf053"
+            text: iconCode
         }
         MouseArea {
             anchors.fill: parent
@@ -37,6 +37,16 @@ Rectangle {
             onExited: {
                 parent.color = "#00000000";
             }
+            onPressed: {
+                parent.clicked();
+            }
+        }
+    }
+    IconBtn {
+        id:goPreMonthBtn
+        anchors.left: parent.left
+        onClicked: {
+            console.log("Clicked in Parent");
         }
     }
     Rectangle {
@@ -53,36 +63,12 @@ Rectangle {
             text: "2024年8月"
         }
     }
-    Rectangle {
+    IconBtn {
         id:goNextMonthBtn
-        color: "#00000000"
-        anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin:4
-        width:32
-        height:32
-        radius:32
-        border {
-            width: 1
-            color: "#ff797B7F"
+        iconCode:"\uf054"
+        onClicked: {
+            console.log("Clicked in Parent");
         }
-        Text{
-            color:"#ff4C4F54"
-            font.family: fontLoader.name
-            font.pixelSize: 14
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            text: "\uf054"
-        }
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: {
-                parent.color = "#4bffffff";
-            }
-            onExited: {
-                parent.color = "#00000000";
-            }
-        }
-    }
+    }    
 }
