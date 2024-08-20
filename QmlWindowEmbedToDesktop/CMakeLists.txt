@@ -37,6 +37,8 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
             WeekHeader.qml
             CalendarBody.qml
             SwitchBtn.qml
+            ListHeader.qml
+            ListBody.qml
         RESOURCES
             fa-solid-900.ttf
             Calendar.js

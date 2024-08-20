@@ -53,16 +53,24 @@ Window {
         Rectangle {
             id:list
             anchors.top: body.bottom
-            anchors.topMargin:6
+            anchors.topMargin:16
             anchors.left: bg.left
             anchors.right: bg.right
-            anchors.leftMargin:14
-            anchors.rightMargin:14
+            anchors.leftMargin:34
+            anchors.rightMargin:34
             anchors.bottom: switchBtn.top
-            visible:true
+            visible:true            
+            color:"#00000000"
+            ListHeader{
+                id: listHeader
+            }
+            ListBody{
+                id: listBody
+            }
         }
         SwitchBtn {
             id: switchBtn
         }
+
     }
 }
