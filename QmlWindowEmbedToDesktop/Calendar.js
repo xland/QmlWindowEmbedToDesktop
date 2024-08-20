@@ -1,7 +1,12 @@
-let curDate;
+let tarDate;
 
-let getOneMonthDate = (tarDate) => {
-    curDate = tarDate;
+
+let getOneMonthDate = (val) => {
+    if (val == 0) {
+        tarDate = new Date();
+    } else {
+        tarDate.setMonth(tarDate.getMonth() + val);
+    }
     let result = [];
     let year = tarDate.getFullYear();
     let month = tarDate.getMonth();

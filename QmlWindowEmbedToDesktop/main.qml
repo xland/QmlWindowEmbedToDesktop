@@ -3,7 +3,7 @@ import QtQuick.Window
 
 Window {
     id:root
-    flags: Qt.ToolTip | Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint
     color: "#00000000"
     visible: true
     width: 580

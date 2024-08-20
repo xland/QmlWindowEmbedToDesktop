@@ -7,6 +7,12 @@ Rectangle {
     anchors.topMargin: 3
     width:270
     height:40
+    property string yearMonthText
+    function setYearMonth(curDate){
+        let year = curDate.getFullYear();
+        let month = curDate.getMonth()+1;
+        yearMonthText = `${year}年${month}月`;
+    }
     component IconBtn: Rectangle {
         property string iconCode:"\uf053"
         color: "#00000000"
@@ -46,7 +52,7 @@ Rectangle {
         id:goPreMonthBtn
         anchors.left: parent.left
         onClicked: {
-            console.log("Clicked in Parent");
+            calendarBody.roteMonth(-1);
         }
     }
     Rectangle {
@@ -60,7 +66,7 @@ Rectangle {
             font.pixelSize: 28
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            text: "2024年8月"
+            text: yearMonthText
         }
     }
     IconBtn {
@@ -68,7 +74,10 @@ Rectangle {
         anchors.right: parent.right
         iconCode:"\uf054"
         onClicked: {
-            console.log("Clicked in Parent");
+            calendarBody.roteMonth(1);
         }
-    }    
+    }
+    Component.onCompleted: {
+        calendarBody.roteMonth(0);
+    }
 }

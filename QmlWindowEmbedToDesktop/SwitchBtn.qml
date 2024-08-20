@@ -2,7 +2,7 @@ import QtQuick
 
 Rectangle {
     anchors.right:bg.right
-    anchors.rightMargin:30
+    anchors.rightMargin:26
     height:48
     width:120
     color:"#00000000"
@@ -25,5 +25,18 @@ Rectangle {
         anchors.leftMargin:2
         anchors.verticalCenter: parent.verticalCenter
         text: "\uf078"
+    }
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: {
+            parent.color = "#4bffffff";
+        }
+        onExited: {
+            parent.color = "#00000000";
+        }
+        onPressed: {
+            parent.clicked();
+        }
     }
 }

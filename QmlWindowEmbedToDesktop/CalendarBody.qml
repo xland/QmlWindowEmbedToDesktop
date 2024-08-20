@@ -2,6 +2,10 @@ import QtQuick
 import "Calendar.js" as Calendar
 Repeater {
     model: []
+    function roteMonth(val){
+        model = Calendar.getOneMonthDate(val);
+        calendarHeader.setYearMonth(Calendar.tarDate)
+    }
     Rectangle {
         x:(index%7)*(body.width/7)+11
         height:57
@@ -25,7 +29,7 @@ Repeater {
                 color:modelData.isCurMonth? "#FF1F2329":"#ff666666"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 9
+                anchors.topMargin: 8
                 font.pixelSize: 20
                 text:modelData.day
             }
@@ -43,7 +47,7 @@ Repeater {
                 font.pixelSize: 10
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.topMargin: 7
+                anchors.topMargin: 8
                 anchors.rightMargin: 7
                 text:"休"
             }
@@ -56,9 +60,5 @@ Repeater {
                 radius:6
             }
         }
-    }
-    Component.onCompleted: {
-        let arr = Calendar.getOneMonthDate(new Date());
-        model.push(...arr);
     }
 }
