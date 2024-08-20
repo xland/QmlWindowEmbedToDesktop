@@ -8,35 +8,45 @@ Rectangle {
     color:"#00000000"
     anchors.bottom: bg.bottom
     anchors.bottomMargin:16
+    radius:3
     Text {
         id:showJobText
         color:"#ff007AFF"
         font.pixelSize: 20
         anchors.left:parent.left
-        anchors.leftMargin:10
+        anchors.leftMargin:8
         anchors.verticalCenter: parent.verticalCenter
         text: "显示日程"
     }
     Text {
+        id:showJobIcon
         font.family: fontLoader.name
         color:"#ff007AFF"
         font.pixelSize: 20
         anchors.left:showJobText.right
-        anchors.leftMargin:2
+        anchors.leftMargin:4
         anchors.verticalCenter: parent.verticalCenter
         text: "\uf078"
     }
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         onEntered: {
-            parent.color = "#4bffffff";
+            parent.color = "#bbffffff";
         }
         onExited: {
             parent.color = "#00000000";
         }
         onPressed: {
-            parent.clicked();
+            list.visible = !list.visible;
+            if(list.visible){
+                root.height = 860;
+                showJobIcon.text = "\uf077"
+            }else{
+                root.height = 580;
+                showJobIcon.text = "\uf078"
+            }            
         }
     }
 }

@@ -7,7 +7,7 @@ Window {
     color: "#00000000"
     visible: true
     width: 580
-    height: 580
+    height: 860  //580,860
     title: "QtEmbededWindow"
     property point winPos: Qt.point(0, 0)
     FontLoader {
@@ -41,12 +41,25 @@ Window {
             anchors.right: bg.right
             anchors.leftMargin:14
             anchors.rightMargin:14
+            height:412            
+            color:"#00000000"
             WeekHeader {
                 id: weekHeader
             }  
             CalendarBody {
                 id: calendarBody
             }
+        }
+        Rectangle {
+            id:list
+            anchors.top: body.bottom
+            anchors.topMargin:6
+            anchors.left: bg.left
+            anchors.right: bg.right
+            anchors.leftMargin:14
+            anchors.rightMargin:14
+            anchors.bottom: switchBtn.top
+            visible:true
         }
         SwitchBtn {
             id: switchBtn
