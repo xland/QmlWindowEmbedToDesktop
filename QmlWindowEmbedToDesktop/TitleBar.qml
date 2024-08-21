@@ -33,6 +33,9 @@ Rectangle {
             onExited: {
                 parent.color = "#00000000";
             }
+            onClicked:{
+                Qt.quit();
+            }
         }
     }
     Rectangle {
@@ -45,6 +48,7 @@ Rectangle {
         radius: 2
         color: "#00000000"
         Text{
+            id:pinIcon
             color:"#ff646A73";
             font.family: fontLoader.name
             font.pixelSize: 12
@@ -60,6 +64,15 @@ Rectangle {
             }
             onExited: {
                 parent.color = "#00000000";
+            }
+            onClicked:{
+                if(pinIcon.text == "\uf08d"){
+                    embedHelper.Embed();
+                    pinIcon.text = "\ue68f"
+                }else{
+                    embedHelper.UnEmbed();
+                    pinIcon.text = "\uf08d"
+                }
             }
         }
     }

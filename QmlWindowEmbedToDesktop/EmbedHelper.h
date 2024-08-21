@@ -1,11 +1,15 @@
 #pragma once
 #include <Windows.h> 
-class EmbedHelper
+#include <QObject>
+class EmbedHelper : public QObject
 {
+	Q_OBJECT
 public:
+	explicit EmbedHelper(QObject* parent = nullptr) : QObject(parent) {}
 	~EmbedHelper();
-	static void Embed(HWND tarHwnd);
+	void SetHwnd(HWND tarHwnd);
+	Q_INVOKABLE void Embed();
+	Q_INVOKABLE void UnEmbed();
 private:
-	EmbedHelper();
 
 };

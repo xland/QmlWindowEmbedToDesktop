@@ -7,10 +7,11 @@ namespace {
 	HWND workerW = nullptr;
 	HWND rawInputWindowHandle = nullptr;
 	HWND tarHwnd = nullptr;
+    bool isEmbeded = false;
 }
 LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    if (uMsg == WM_INPUT)
+    if (uMsg == WM_INPUT && isEmbeded)
     {
         UINT dwSize = sizeof(RAWINPUT);
         static BYTE lpb[sizeof(RAWINPUT)];
@@ -122,25 +123,46 @@ void roteInput()
     rids[1].hwndTarget = rawInputWindowHandle;
     RegisterRawInputDevices(rids, 2, sizeof(rids[0]));
 }
-void EmbedHelper::Embed(HWND _tarHwnd) {
-    tarHwnd = _tarHwnd;
-    auto hwnd = GetShellWindow();
-    SendMessage(hwnd, 0x052C, 0x0000000D, 0);
-    SendMessage(hwnd, 0x052C, 0x0000000D, 1);
-    EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
-        HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
-        if (shellDllDefView != nullptr) {
-            workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
-        }
-        return TRUE;
-        }, NULL);
-    SetParent(tarHwnd, workerW);
-    roteInput();
-}
-EmbedHelper::EmbedHelper()
-{
-}
+
 
 EmbedHelper::~EmbedHelper()
 {
+}
+void EmbedHelper::SetHwnd(HWND _tarHwnd) {
+    tarHwnd = _tarHwnd;
+}
+void EmbedHelper::Embed() { 
+    if (!workerW) {
+        auto hwnd = GetShellWindow();
+        SendMessage(hwnd, 0x052C, 0x0000000D, 0);
+        SendMessage(hwnd, 0x052C, 0x0000000D, 1);
+        EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
+            HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
+            if (shellDllDefView != nullptr) {
+                workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
+            }
+            return TRUE;
+            }, NULL);
+    }
+    SetParent(tarHwnd, workerW);
+    roteInput();
+    isEmbeded = true;
+}
+void EmbedHelper::UnEmbed()
+{
+    //SendMessage(rawInputWindowHandle, WM_CLOSE, 0, 0);
+    //RAWINPUTDEVICE rids[2];
+    //rids[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
+    //rids[0].usUsage = HID_USAGE_GENERIC_MOUSE;
+    //rids[0].dwFlags = RIDEV_INPUTSINK;
+    //rids[0].hwndTarget = nullptr;
+
+    //rids[1].usUsagePage = HID_USAGE_PAGE_GENERIC;
+    //rids[1].usUsage = HID_USAGE_GENERIC_KEYBOARD;
+    //rids[1].dwFlags = RIDEV_EXINPUTSINK;
+    //rids[1].hwndTarget = nullptr;
+    //RegisterRawInputDevices(rids, 2, sizeof(rids[0]));
+    //rawInputWindowHandle = nullptr;
+    SetParent(tarHwnd, nullptr);
+    isEmbeded = false;
 }
