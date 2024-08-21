@@ -71,6 +71,5 @@ Window {
         SwitchBtn {
             id: switchBtn
         }
-
     }
 }
