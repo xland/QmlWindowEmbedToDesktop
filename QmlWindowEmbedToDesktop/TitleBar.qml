@@ -7,6 +7,7 @@ Rectangle {
     height: 48
     width:bg.width
     color: "#00000000"
+    property point winPos: Qt.point(0, 0)
     function mouseMove(x,y){
         if(isMouseIn(settingBtn,x,y)){
             settingBtn.color = "#28000000";
@@ -21,7 +22,6 @@ Rectangle {
     }
     Rectangle {
         id: settingBtn
-        property int enterTime;
         y:10
         height: 28
         width: 28

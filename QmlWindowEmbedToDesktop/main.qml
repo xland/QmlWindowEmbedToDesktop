@@ -9,7 +9,6 @@ Window {
     width: 580
     height: 580  //580,860
     title: "QtEmbededWindow"
-    property point winPos: Qt.point(0, 0)
     function isMouseIn(ele,x,y){
         //let flag = (x>ele.x && x < ele.x+ele.width && y>ele.y && y<ele.y+ele.height)
         //return flag;
@@ -25,6 +24,12 @@ Window {
         calendarHeader.mouseMove(x,y)
         switchBtn.mouseMove(x,y)
         listBody.mouseMove(x,y)
+    }
+    function downFunc(x,y){
+        listBody.mouseDown(x,y)
+    }
+    function upFunc(x,y){
+        listBody.mouseUp(x,y)
     }
     FontLoader {
         id: fontLoader
@@ -75,6 +80,7 @@ Window {
             anchors.leftMargin:34
             anchors.rightMargin:34
             anchors.bottom: switchBtn.top
+            anchors.bottomMargin:12
             visible:false            
             color:"#00000000"
             ListHeader{

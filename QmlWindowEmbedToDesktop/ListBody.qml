@@ -6,13 +6,39 @@ Rectangle {
     property real totalHeight:18*56
     property real position: 0
     property bool mouseInFlag:false
+    property bool mouseInThumb:false
+    property real mouseDownThumbY:-1000
     function wheelFunc(flag,x,y){
         if(isMouseIn(listBody,x,y)){
             listBody.position += flag ? -0.1 : 0.1
             listBody.position = Math.max(0, Math.min(1, listBody.position))
         }
     }
+    function mouseDown(x,y){
+        if(isMouseIn(thumb,x,y)){
+            mouseDownThumbY = y;
+        }
+    }
+    function mouseUp(x,y){
+        mouseDownThumbY = -1000
+    }
     function mouseMove(x,y){
+        if(mouseDownThumbY != -1000){
+            thumb.y += (y-mouseDownThumbY);
+            listBody.position = thumb.y / (thumb.parent.height - thumb.height)
+            listBody.position = Math.max(0, Math.min(1, listBody.position))
+            mouseDownThumbY = y;
+            return;
+        }
+        if(isMouseIn(thumb,x,y)){
+            thumb.color = "#40000000";
+            mouseInThumb = true;
+            return;
+        }
+        if(mouseInThumb){
+            thumb.color = "#20000000";
+            mouseInThumb = false;            
+        }
         if(isMouseIn(listBody,x,y)){
             mouseInFlag = true
             for(let i=0;i<listRepeater.count;i++){
@@ -70,7 +96,7 @@ Rectangle {
                     anchors.rightMargin: 8
                     color:"#FF1F2329"
                     elide: Text.ElideRight
-                    text: "这是日记内容的标题，诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！" + (index + 1)
+                    text: (index + 1)+"这是日记内容的标题，诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！"
                 }
                 Text {
                     anchors.top: title.bottom
@@ -82,7 +108,7 @@ Rectangle {
                     font.pixelSize: 14
                     color:"#FF666666"
                     elide: Text.ElideRight
-                    text: "这是日记内容的内容，诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！" + (index + 1)
+                    text: (index + 1)+"这是日记内容的内容，诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！"
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -128,6 +154,7 @@ Rectangle {
                 onReleased: {
                     listBody.position = thumb.y / (thumb.parent.height - thumb.height)
                     listBody.position = Math.max(0, Math.min(1, listBody.position))
+                    mouseDownThumb = false;
                 }
                 onPositionChanged: {
                     listBody.position = thumb.y / (thumb.parent.height - thumb.height)

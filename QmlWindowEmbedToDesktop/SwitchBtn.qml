@@ -11,11 +11,11 @@ Rectangle {
     }
     anchors.right:bg.right
     anchors.rightMargin:26
-    height:48
+    height:42
     width:120
     color:"#00000000"
     anchors.bottom: bg.bottom
-    anchors.bottomMargin:16
+    anchors.bottomMargin:18
     radius:3
     Text {
         id:showJobText

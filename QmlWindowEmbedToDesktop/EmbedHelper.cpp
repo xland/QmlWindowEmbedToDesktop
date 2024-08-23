@@ -97,11 +97,17 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                     case RI_MOUSE_LEFT_BUTTON_DOWN:
                     {
                         PostMessage(tarHwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+                        point.x = point.x / ratio;
+                        point.y = point.y / ratio;
+                        QMetaObject::invokeMethod(window, "downFunc", Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
                         break;
                     }
                     case RI_MOUSE_LEFT_BUTTON_UP:
                     {
                         PostMessage(tarHwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+                        point.x = point.x / ratio;
+                        point.y = point.y / ratio;
+                        QMetaObject::invokeMethod(window, "upFunc", Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
                         break;
                     }
                     default:
@@ -109,15 +115,6 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                         point.x = point.x / ratio;
                         point.y = point.y / ratio;
                         QMetaObject::invokeMethod(window, "moveFunc", Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
-                        //auto str = std::format("111111111111:::{},{}", point.x, point.y);
-                        //LogMessage(str.data());
-                        
-                        //SendMessage(tarHwnd, WM_MOUSEMOVE, 0, lParam);
-                        //QPointF position(point.x, point.y);
-                        //auto str = std::format("111111111111{},{}", point.x, point.y);
-                        //LogMessage(str.data());
-                        //QMouseEvent* e = new QMouseEvent(QEvent::MouseMove, position, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-                        //QCoreApplication::postEvent(root, e);
                         return 0;
                     }
                 }
