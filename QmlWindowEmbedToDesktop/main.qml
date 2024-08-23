@@ -7,9 +7,21 @@ Window {
     color: "#00000000"
     visible: true
     width: 580
-    height: 860  //580,860
+    height: 580  //580,860
     title: "QtEmbededWindow"
     property point winPos: Qt.point(0, 0)
+    signal mouseMove(int x,int y)
+    function isMouseIn(ele,x,y){
+        var pos = ele.mapToGlobal(0, 0);
+        console.log("222222222222222222222222",pos.x,pos.y,pos.x+ele.width,pos.y+ele.height)
+        return (x>pos.x && x < pos.x+ele.width && y>pos.y && y<pos.y+ele.height)
+    }
+    function wheelFunc(flag){
+        listBody.wheelFunc(flag);
+    }
+    function moveFunc(x,y){
+        mouseMove(Qt.application.mouseX,Qt.application.mouseX)
+    }
     FontLoader {
         id: fontLoader
         source: "fa-solid-900.ttf"
@@ -59,7 +71,7 @@ Window {
             anchors.leftMargin:34
             anchors.rightMargin:34
             anchors.bottom: switchBtn.top
-            visible:true            
+            visible:false            
             color:"#00000000"
             ListHeader{
                 id: listHeader

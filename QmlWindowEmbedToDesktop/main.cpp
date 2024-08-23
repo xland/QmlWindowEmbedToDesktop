@@ -4,6 +4,7 @@
 #include <qquickwindow.h>
 #include <qwindow.h>
 #include <EmbedHelper.h>
+#include <qquickitem.h>
 
 
 int main(int argc, char *argv[])
@@ -13,15 +14,12 @@ int main(int argc, char *argv[])
 #endif
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    EmbedHelper embedHelper;
-    engine.rootContext()->setContextProperty("embedHelper", &embedHelper);
     engine.load(QUrl(QStringLiteral("qrc:/qt/qml/qmlwindowembedtodesktop/main.qml")));
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
     auto winObj = engine.rootObjects().at(0);
-    QQuickWindow* window = static_cast<QQuickWindow*>(winObj);
-    auto hwnd = (HWND)window->winId();
-    embedHelper.SetHwnd(hwnd);
+    auto instance = EmbedHelper::Init(winObj);
+    engine.rootContext()->setContextProperty("embedHelper", instance);
     return app.exec();
 }

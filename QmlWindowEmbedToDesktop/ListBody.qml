@@ -3,6 +3,12 @@ import QtQuick.Controls
 
 Rectangle {
     id:listBody
+    property real totalHeight:18*56
+    property real position: 0
+    function wheelFunc(flag){
+        listBody.position += flag ? -0.1 : 0.1
+        listBody.position = Math.max(0, Math.min(1, listBody.position))
+    }
     anchors.top: listHeader.bottom
     anchors.topMargin: 8
     anchors.bottom: parent.bottom
@@ -10,8 +16,6 @@ Rectangle {
     anchors.right: parent.right
     color:"#00000000"
     clip:true
-    property real totalHeight:18*56
-    property real position: 0
     Repeater {
         id:listRepeater
         model: 18
@@ -112,8 +116,7 @@ Rectangle {
         anchors.fill: parent
         acceptedButtons: Qt.MiddleButton
         onWheel: {
-            listBody.position += wheel.angleDelta.y > 0 ? -0.1 : 0.1
-            listBody.position = Math.max(0, Math.min(1, listBody.position))
+            listBody.wheelFunc(wheel.angleDelta.y > 0)
         }
     }
 } 

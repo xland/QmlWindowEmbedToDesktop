@@ -6,6 +6,18 @@ Rectangle {
     height: 48
     width:bg.width
     color: "#00000000"
+    Connections {
+        target: root
+        onMouseMove: { 
+            if(root.isMouseIn(settingBtn,x, y)){
+                console.log("222222222222222222222222",x,y,true)
+                settingBtn.color = "#28000000";
+            }else{
+                console.log("222222222222222222222222",x,y,false)
+                settingBtn.color = "#00000000";
+            }
+        }
+    }
     Rectangle {
         id: settingBtn
         y:10

@@ -1,141 +1,157 @@
 #include "EmbedHelper.h"
-
 #include <hidusage.h>
 #include <cstdint>
+#include <qquickitem.h>
+#include <format>
+#include <iostream>
 
 namespace {
-	HWND workerW = nullptr;
-	HWND rawInputWindowHandle = nullptr;
-	HWND tarHwnd = nullptr;
-    bool isEmbeded = false;
+	HWND workerW{ nullptr };
+    HWND shellHwnd{ nullptr };
+    HWND desktopHwnd{ nullptr };
+	HWND tarHwnd{ nullptr };
+    bool isEmbeded{ false };
+    std::vector<wchar_t> buf(18);
+    QObject* root;
+    WNDPROC OldProc;
+    RECT tarRect;
+    EmbedHelper* instance;
 }
+
+std::wstring GetWindowClassName(HWND hwnd)
+{
+    std::array<WCHAR, 16> className;
+    GetClassName(hwnd, className.data(), (int)className.size());
+    std::wstring title(className.data());
+    return title;
+}
+
+void LogMessage(const std::string&& message) {
+    OutputDebugStringA(message.c_str());
+    OutputDebugStringA("\r\n");
+}
+
+POINT getMousePosInWin() {
+    POINT point;
+    GetCursorPos(&point);
+    if (point.x > tarRect.left && point.y > tarRect.top && point.x < tarRect.right && point.y < tarRect.bottom) {
+        point.x = point.x - tarRect.left;
+        point.y = point.y - tarRect.top;
+    }
+    else
+    {
+        point.x = -1;
+        point.y = -1;
+    }
+    return point;
+}
+
+void sendEvent(QObject* parent, QMouseEvent* event) {
+    for (QObject* child : parent->children()) {
+        QQuickItem* childItem = qobject_cast<QQuickItem*>(child);
+        if (childItem) {
+            QCoreApplication::postEvent(childItem, event);
+            sendEvent(childItem, event);
+        }
+    }
+}
+
 LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (uMsg == WM_INPUT && isEmbeded)
     {
+
+
+        POINT point = getMousePosInWin();
+        if (point.x < 0 && point.y < 0 && isEmbeded) {
+            return 0;
+        }
+        HWND curHwnd = WindowFromPoint(point);
+        auto cn = GetWindowClassName(curHwnd);
+        if (cn != L"SysListView32") {
+            return 0;
+        }
         UINT dwSize = sizeof(RAWINPUT);
         static BYTE lpb[sizeof(RAWINPUT)];
         GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
         auto* raw = (RAWINPUT*)lpb;
         switch (raw->header.dwType)
         {
-        case RIM_TYPEMOUSE:
-        {
-            RAWMOUSE rawMouse = raw->data.mouse;
-            if ((rawMouse.usButtonFlags & RI_MOUSE_WHEEL) == RI_MOUSE_WHEEL || (rawMouse.usButtonFlags & RI_MOUSE_HWHEEL) == RI_MOUSE_HWHEEL)
+            case RIM_TYPEMOUSE:
             {
-                bool isHorizontalScroll = (rawMouse.usButtonFlags & RI_MOUSE_HWHEEL) == RI_MOUSE_HWHEEL;
-                auto wheelDelta = (float)(short)rawMouse.usButtonData;
-                if (isHorizontalScroll)
+                RAWMOUSE rawMouse = raw->data.mouse;
+                if (rawMouse.usButtonFlags == RI_MOUSE_WHEEL)
                 {
-                    PostMessage(tarHwnd, WM_HSCROLL, wheelDelta > 0 ? SB_LINELEFT : SB_LINERIGHT, 0);
+                    auto wheelDelta = (float)(short)rawMouse.usButtonData; 
+                    QMetaObject::invokeMethod(root, "wheelFunc", Q_ARG(QVariant, wheelDelta > 0));
+                    break;
                 }
-                else
+                auto lParam = MAKELPARAM(point.x, point.y);
+                switch (rawMouse.ulButtons)
                 {
-                    PostMessage(tarHwnd, WM_VSCROLL, wheelDelta > 0 ? SB_LINEUP : SB_LINEDOWN, 0);
+                    case RI_MOUSE_LEFT_BUTTON_DOWN:
+                    {
+                        PostMessage(tarHwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+                        break;
+                    }
+                    case RI_MOUSE_LEFT_BUTTON_UP:
+                    {
+                        PostMessage(tarHwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+                        break;
+                    }
+                    default:
+                    {
+                        //QMetaObject::invokeMethod(root, "moveFunc", Q_ARG(QVariant, (int)point.x + (int)tarRect.left), Q_ARG(QVariant, (int)point.y + (int)tarRect.top));
+                        //SendMessage(tarHwnd, WM_MOUSEMOVE, 0, lParam);
+                        QPointF position(point.x, point.y);
+                        auto str = std::format(L"111111111111{},{}", point.x, point.y);
+                        LogMessage(str);
+                        QMouseEvent* e = new QMouseEvent(QEvent::MouseMove, position, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+                        QCoreApplication::postEvent(root, e);
+                        return 0;
+                    }
                 }
                 break;
             }
-            POINT point;
-            GetCursorPos(&point);
-            ScreenToClient(tarHwnd, &point);
-            auto lParam = MAKELPARAM(point.x, point.y);
-            switch (rawMouse.ulButtons)
-            {
-            case RI_MOUSE_LEFT_BUTTON_DOWN:
-            {
-                PostMessage(tarHwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
-                break;
-            }
-            case RI_MOUSE_LEFT_BUTTON_UP:
-            {
-                PostMessage(tarHwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
-                break;
-            }
-            case RI_MOUSE_RIGHT_BUTTON_DOWN:
-            {
-                PostMessage(tarHwnd, WM_RBUTTONDOWN, MK_RBUTTON, lParam);
-                break;
-            }
-            case RI_MOUSE_RIGHT_BUTTON_UP:
-            {
-                PostMessage(tarHwnd, WM_RBUTTONUP, MK_RBUTTON, lParam);
-                break;
-            }
-            default:
-            {
-                PostMessage(tarHwnd, WM_MOUSEMOVE, 0x0020, lParam);
-                break;
-            }
-            }
-            break;
-        }
-        case RIM_TYPEKEYBOARD:
-        {
-            auto message = raw->data.keyboard.Message;
-            auto vKey = raw->data.keyboard.VKey;
-            auto makeCode = raw->data.keyboard.MakeCode;
-            auto flags = raw->data.keyboard.Flags;
-            std::uint32_t lParam = 1u;
-            lParam |= static_cast<std::uint32_t>(makeCode) << 16;
-            lParam |= 1u << 24;
-            lParam |= 0u << 29;
-            if (!(flags & RI_KEY_BREAK)) {
-                lParam |= 1u << 30;
-                lParam |= 1u << 31;
-            }
-            PostMessage(tarHwnd, message, vKey, lParam);
-            break;
-        }
         }
     }
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    return CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam);
 }
 void roteInput()
 {
-    if (rawInputWindowHandle != nullptr)
-    {
-        return;
-    }
-    HINSTANCE hInstance = GetModuleHandle(nullptr);
-    WNDCLASS wc = {};
-    wc.lpfnWndProc = handleWindowMessage;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = L"HikRawInputWindow";
-    if (!RegisterClass(&wc))
-    {
-        return;
-    }
-    rawInputWindowHandle = CreateWindowEx(0, wc.lpszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr, hInstance, nullptr);
-    if (!rawInputWindowHandle)
-    {
-        return;
-    }
     RAWINPUTDEVICE rids[2];
     rids[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
     rids[0].usUsage = HID_USAGE_GENERIC_MOUSE;
     rids[0].dwFlags = RIDEV_INPUTSINK;
-    rids[0].hwndTarget = rawInputWindowHandle;
+    rids[0].hwndTarget = tarHwnd;
 
     rids[1].usUsagePage = HID_USAGE_PAGE_GENERIC;
     rids[1].usUsage = HID_USAGE_GENERIC_KEYBOARD;
     rids[1].dwFlags = RIDEV_EXINPUTSINK;
-    rids[1].hwndTarget = rawInputWindowHandle;
+    rids[1].hwndTarget = tarHwnd;
     RegisterRawInputDevices(rids, 2, sizeof(rids[0]));
+    OldProc = (WNDPROC)SetWindowLongPtr(tarHwnd, GWLP_WNDPROC, (LONG_PTR)handleWindowMessage);
 }
 
 
 EmbedHelper::~EmbedHelper()
 {
 }
-void EmbedHelper::SetHwnd(HWND _tarHwnd) {
-    tarHwnd = _tarHwnd;
+
+EmbedHelper* EmbedHelper::Init(QObject* _root) {
+    root = _root;
+    QQuickWindow* window = static_cast<QQuickWindow*>(root);
+    tarHwnd = (HWND)window->winId();
+    instance = new EmbedHelper(root);
+    return instance;
 }
+
 void EmbedHelper::Embed() { 
     if (!workerW) {
-        auto hwnd = GetShellWindow();
-        SendMessage(hwnd, 0x052C, 0x0000000D, 0);
-        SendMessage(hwnd, 0x052C, 0x0000000D, 1);
+        desktopHwnd = GetDesktopWindow();
+        shellHwnd = GetShellWindow();
+        SendMessage(shellHwnd, 0x052C, 0x0000000D, 0);
+        SendMessage(shellHwnd, 0x052C, 0x0000000D, 1);
         EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
             HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
             if (shellDllDefView != nullptr) {
@@ -146,23 +162,12 @@ void EmbedHelper::Embed() {
     }
     SetParent(tarHwnd, workerW);
     roteInput();
+    GetWindowRect(tarHwnd, &tarRect);
     isEmbeded = true;
 }
 void EmbedHelper::UnEmbed()
 {
-    //SendMessage(rawInputWindowHandle, WM_CLOSE, 0, 0);
-    //RAWINPUTDEVICE rids[2];
-    //rids[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
-    //rids[0].usUsage = HID_USAGE_GENERIC_MOUSE;
-    //rids[0].dwFlags = RIDEV_INPUTSINK;
-    //rids[0].hwndTarget = nullptr;
-
-    //rids[1].usUsagePage = HID_USAGE_PAGE_GENERIC;
-    //rids[1].usUsage = HID_USAGE_GENERIC_KEYBOARD;
-    //rids[1].dwFlags = RIDEV_EXINPUTSINK;
-    //rids[1].hwndTarget = nullptr;
-    //RegisterRawInputDevices(rids, 2, sizeof(rids[0]));
-    //rawInputWindowHandle = nullptr;
+    SetWindowLongPtr(tarHwnd, GWLP_WNDPROC, (LONG_PTR)OldProc);
     SetParent(tarHwnd, nullptr);
     isEmbeded = false;
 }
