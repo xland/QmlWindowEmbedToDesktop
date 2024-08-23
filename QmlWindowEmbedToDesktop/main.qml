@@ -20,7 +20,9 @@ Window {
         listBody.wheelFunc(flag);
     }
     function moveFunc(x,y){
-        mouseMove(Qt.application.mouseX,Qt.application.mouseX)
+        let pos = root.mapFromGlobal(x,y)
+        console.log("moveFunc",pos.x,pos.y)
+        //mouseMove(Qt.application.mouseX,Qt.application.mouseX)
     }
     FontLoader {
         id: fontLoader

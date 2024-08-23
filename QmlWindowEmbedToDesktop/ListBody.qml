@@ -6,6 +6,7 @@ Rectangle {
     property real totalHeight:18*56
     property real position: 0
     function wheelFunc(flag){
+        console.log("wheel")
         listBody.position += flag ? -0.1 : 0.1
         listBody.position = Math.max(0, Math.min(1, listBody.position))
     }

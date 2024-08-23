@@ -6,20 +6,9 @@ Rectangle {
     height: 48
     width:bg.width
     color: "#00000000"
-    Connections {
-        target: root
-        onMouseMove: { 
-            if(root.isMouseIn(settingBtn,x, y)){
-                console.log("222222222222222222222222",x,y,true)
-                settingBtn.color = "#28000000";
-            }else{
-                console.log("222222222222222222222222",x,y,false)
-                settingBtn.color = "#00000000";
-            }
-        }
-    }
     Rectangle {
         id: settingBtn
+        property int enterTime;
         y:10
         height: 28
         width: 28
@@ -41,8 +30,11 @@ Rectangle {
             hoverEnabled: true
             onEntered: {
                 parent.color = "#28000000";
+                settingBtn.enterTime = Date.now()
             }
             onExited: {
+if(Date.now() - settingBtn.enterTime < 100) return;
+console.log("exit:",Date.now() - settingBtn.enterTime)
                 parent.color = "#00000000";
             }
             onClicked:{

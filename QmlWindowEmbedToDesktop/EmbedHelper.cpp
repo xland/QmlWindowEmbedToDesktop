@@ -12,7 +12,7 @@ namespace {
 	HWND tarHwnd{ nullptr };
     bool isEmbeded{ false };
     std::vector<wchar_t> buf(18);
-    QObject* root;
+    QQuickWindow* window;
     WNDPROC OldProc;
     RECT tarRect;
     EmbedHelper* instance;
@@ -60,8 +60,6 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 {
     if (uMsg == WM_INPUT && isEmbeded)
     {
-
-
         POINT point = getMousePosInWin();
         if (point.x < 0 && point.y < 0 && isEmbeded) {
             return 0;
@@ -83,7 +81,7 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                 if (rawMouse.usButtonFlags == RI_MOUSE_WHEEL)
                 {
                     auto wheelDelta = (float)(short)rawMouse.usButtonData; 
-                    QMetaObject::invokeMethod(root, "wheelFunc", Q_ARG(QVariant, wheelDelta > 0));
+                    QMetaObject::invokeMethod(window, "wheelFunc", Q_ARG(QVariant, wheelDelta > 0));
                     break;
                 }
                 auto lParam = MAKELPARAM(point.x, point.y);
@@ -101,13 +99,17 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                     }
                     default:
                     {
-                        //QMetaObject::invokeMethod(root, "moveFunc", Q_ARG(QVariant, (int)point.x + (int)tarRect.left), Q_ARG(QVariant, (int)point.y + (int)tarRect.top));
+                        auto pos = window->mapFromGlobal(QPoint((int)point.x + (int)tarRect.left, (int)point.y + (int)tarRect.top));
+                        QMetaObject::invokeMethod(window, "moveFunc", Q_ARG(QVariant, (int)point.x + (int)tarRect.left), Q_ARG(QVariant, (int)point.y + (int)tarRect.top));
+                        //auto str = std::format("111111111111:::{},{}", point.x, point.y);
+                        //LogMessage(str.data());
+                        
                         //SendMessage(tarHwnd, WM_MOUSEMOVE, 0, lParam);
-                        QPointF position(point.x, point.y);
-                        auto str = std::format(L"111111111111{},{}", point.x, point.y);
-                        LogMessage(str);
-                        QMouseEvent* e = new QMouseEvent(QEvent::MouseMove, position, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-                        QCoreApplication::postEvent(root, e);
+                        //QPointF position(point.x, point.y);
+                        //auto str = std::format("111111111111{},{}", point.x, point.y);
+                        //LogMessage(str.data());
+                        //QMouseEvent* e = new QMouseEvent(QEvent::MouseMove, position, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+                        //QCoreApplication::postEvent(root, e);
                         return 0;
                     }
                 }
@@ -139,10 +141,9 @@ EmbedHelper::~EmbedHelper()
 }
 
 EmbedHelper* EmbedHelper::Init(QObject* _root) {
-    root = _root;
-    QQuickWindow* window = static_cast<QQuickWindow*>(root);
+    window = static_cast<QQuickWindow*>(_root);
     tarHwnd = (HWND)window->winId();
-    instance = new EmbedHelper(root);
+    instance = new EmbedHelper(_root);
     return instance;
 }
 
