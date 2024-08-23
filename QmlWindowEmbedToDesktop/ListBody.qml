@@ -5,10 +5,32 @@ Rectangle {
     id:listBody
     property real totalHeight:18*56
     property real position: 0
-    function wheelFunc(flag){
-        console.log("wheel")
-        listBody.position += flag ? -0.1 : 0.1
-        listBody.position = Math.max(0, Math.min(1, listBody.position))
+    property bool mouseInFlag:false
+    function wheelFunc(flag,x,y){
+        if(isMouseIn(listBody,x,y)){
+            listBody.position += flag ? -0.1 : 0.1
+            listBody.position = Math.max(0, Math.min(1, listBody.position))
+        }
+    }
+    function mouseMove(x,y){
+        if(isMouseIn(listBody,x,y)){
+            mouseInFlag = true
+            for(let i=0;i<listRepeater.count;i++){
+                let item = listRepeater.itemAt(i)
+                let pos = item.mapToItem(null, 0, 0);
+                if(y>pos.y && y<pos.y+item.height){
+                    item.children[0].color = "#88ffffff"
+                }else{
+                    item.children[0].color = "#00000000"
+                }
+            }
+        }else if(mouseInFlag){
+            mouseInFlag = false
+            for(let i=0;i<listRepeater.count;i++){
+                let item = listRepeater.itemAt(i)
+                item.children[0].color = "#00000000"
+            }
+        }
     }
     anchors.top: listHeader.bottom
     anchors.topMargin: 8
@@ -79,6 +101,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+        z:6
         radius:2
         width:6
         color:"#08000000"
@@ -117,7 +140,9 @@ Rectangle {
         anchors.fill: parent
         acceptedButtons: Qt.MiddleButton
         onWheel: {
-            listBody.wheelFunc(wheel.angleDelta.y > 0)
+            let flag = (wheel.angleDelta.y > 0)
+            listBody.position += flag ? -0.1 : 0.1
+            listBody.position = Math.max(0, Math.min(1, listBody.position))
         }
     }
 } 

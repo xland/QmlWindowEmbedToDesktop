@@ -4,6 +4,9 @@
 #include <qquickitem.h>
 #include <format>
 #include <iostream>
+#include <qcoreapplication.h>
+#include <qscreen.h>
+#include <QScreen>
 
 namespace {
 	HWND workerW{ nullptr };
@@ -16,6 +19,7 @@ namespace {
     WNDPROC OldProc;
     RECT tarRect;
     EmbedHelper* instance;
+    qreal scaleFactor;
 }
 
 std::wstring GetWindowClassName(HWND hwnd)
@@ -40,8 +44,8 @@ POINT getMousePosInWin() {
     }
     else
     {
-        point.x = -1;
-        point.y = -1;
+        point.x = -100;
+        point.y = -100;
     }
     return point;
 }
@@ -69,6 +73,7 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
         if (cn != L"SysListView32") {
             return 0;
         }
+        auto ratio = window->screen()->devicePixelRatio();
         UINT dwSize = sizeof(RAWINPUT);
         static BYTE lpb[sizeof(RAWINPUT)];
         GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
@@ -80,8 +85,10 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                 RAWMOUSE rawMouse = raw->data.mouse;
                 if (rawMouse.usButtonFlags == RI_MOUSE_WHEEL)
                 {
+                    point.x = point.x / ratio;
+                    point.y = point.y / ratio;
                     auto wheelDelta = (float)(short)rawMouse.usButtonData; 
-                    QMetaObject::invokeMethod(window, "wheelFunc", Q_ARG(QVariant, wheelDelta > 0));
+                    QMetaObject::invokeMethod(window, "wheelFunc", Q_ARG(QVariant, wheelDelta > 0), Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
                     break;
                 }
                 auto lParam = MAKELPARAM(point.x, point.y);
@@ -99,8 +106,9 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                     }
                     default:
                     {
-                        auto pos = window->mapFromGlobal(QPoint((int)point.x + (int)tarRect.left, (int)point.y + (int)tarRect.top));
-                        QMetaObject::invokeMethod(window, "moveFunc", Q_ARG(QVariant, (int)point.x + (int)tarRect.left), Q_ARG(QVariant, (int)point.y + (int)tarRect.top));
+                        point.x = point.x / ratio;
+                        point.y = point.y / ratio;
+                        QMetaObject::invokeMethod(window, "moveFunc", Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
                         //auto str = std::format("111111111111:::{},{}", point.x, point.y);
                         //LogMessage(str.data());
                         
@@ -171,4 +179,8 @@ void EmbedHelper::UnEmbed()
     SetWindowLongPtr(tarHwnd, GWLP_WNDPROC, (LONG_PTR)OldProc);
     SetParent(tarHwnd, nullptr);
     isEmbeded = false;
+}
+void EmbedHelper::WinResized()
+{
+    GetWindowRect(tarHwnd, &tarRect);
 }

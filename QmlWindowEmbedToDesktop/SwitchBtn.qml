@@ -1,6 +1,14 @@
 import QtQuick
 
 Rectangle {
+    id:switchBtn
+    function mouseMove(x,y){
+        if(isMouseIn(switchBtn,x,y)){
+            switchBtn.color = "#bbffffff";
+        } else {
+            switchBtn.color = "#00000000";
+        }
+    }
     anchors.right:bg.right
     anchors.rightMargin:26
     height:48
@@ -46,7 +54,9 @@ Rectangle {
             }else{
                 root.height = 580;
                 showJobIcon.text = "\uf078"
-            }            
+            }
+            parent.color = "#00000000";
+            embedHelper.WinResized();
         }
     }
 }

@@ -13,6 +13,18 @@ Rectangle {
         let month = curDate.getMonth()+1;
         yearMonthText = `${year}年${month}月`;
     }
+    function mouseMove(x,y){
+        if(isMouseIn(goPreMonthBtn,x,y)){
+            goPreMonthBtn.color = "#4bffffff";
+        } else {
+            goPreMonthBtn.color = "#00000000";
+        }
+        if(isMouseIn(goNextMonthBtn,x,y)){
+            goNextMonthBtn.color = "#4bffffff";
+        } else {
+            goNextMonthBtn.color = "#00000000";
+        }
+    }
     component IconBtn: Rectangle {
         property string iconCode:"\uf053"
         color: "#00000000"

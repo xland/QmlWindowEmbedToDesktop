@@ -10,19 +10,21 @@ Window {
     height: 580  //580,860
     title: "QtEmbededWindow"
     property point winPos: Qt.point(0, 0)
-    signal mouseMove(int x,int y)
     function isMouseIn(ele,x,y){
-        var pos = ele.mapToGlobal(0, 0);
-        console.log("222222222222222222222222",pos.x,pos.y,pos.x+ele.width,pos.y+ele.height)
-        return (x>pos.x && x < pos.x+ele.width && y>pos.y && y<pos.y+ele.height)
+        //let flag = (x>ele.x && x < ele.x+ele.width && y>ele.y && y<ele.y+ele.height)
+        //return flag;
+        var pos = ele.mapToItem(null, 0, 0);
+        let flag = (x>pos.x && x < pos.x+ele.width && y>pos.y && y<pos.y+ele.height)
+        return flag;
     }
-    function wheelFunc(flag){
-        listBody.wheelFunc(flag);
+    function wheelFunc(flag,x,y){
+        listBody.wheelFunc(flag,x,y);
     }
     function moveFunc(x,y){
-        let pos = root.mapFromGlobal(x,y)
-        console.log("moveFunc",pos.x,pos.y)
-        //mouseMove(Qt.application.mouseX,Qt.application.mouseX)
+        titleBar.mouseMove(x,y)
+        calendarHeader.mouseMove(x,y)
+        switchBtn.mouseMove(x,y)
+        listBody.mouseMove(x,y)
     }
     FontLoader {
         id: fontLoader

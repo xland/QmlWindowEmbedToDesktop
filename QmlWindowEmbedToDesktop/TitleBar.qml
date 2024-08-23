@@ -1,4 +1,5 @@
 ﻿import QtQuick
+import QtQuick.Controls 2.15
 
 Rectangle {
     x: 0
@@ -6,6 +7,18 @@ Rectangle {
     height: 48
     width:bg.width
     color: "#00000000"
+    function mouseMove(x,y){
+        if(isMouseIn(settingBtn,x,y)){
+            settingBtn.color = "#28000000";
+        } else {
+            settingBtn.color = "#00000000";
+        }
+        if(isMouseIn(pin,x,y)){
+            pin.color = "#28000000";
+        } else {
+            pin.color = "#00000000";
+        }
+    }
     Rectangle {
         id: settingBtn
         property int enterTime;
@@ -30,11 +43,8 @@ Rectangle {
             hoverEnabled: true
             onEntered: {
                 parent.color = "#28000000";
-                settingBtn.enterTime = Date.now()
             }
             onExited: {
-if(Date.now() - settingBtn.enterTime < 100) return;
-console.log("exit:",Date.now() - settingBtn.enterTime)
                 parent.color = "#00000000";
             }
             onClicked:{
@@ -43,7 +53,7 @@ console.log("exit:",Date.now() - settingBtn.enterTime)
         }
     }
     Rectangle {
-        id: pinBtn
+        id: pin
         y: 10
         height: 28
         width: 28
@@ -82,7 +92,7 @@ console.log("exit:",Date.now() - settingBtn.enterTime)
     }
     MouseArea {
         anchors.left: parent.left
-        anchors.right: pinBtn.left
+        anchors.right: pin.left
         anchors.leftMargin: 0
         anchors.rightMargin: 0
         height: parent.height
