@@ -84,7 +84,7 @@ Rectangle {
     IconBtn {
         id:goNextMonthBtn
         anchors.right: parent.right
-        iconCode:"\uf054"
+        iconCode:"\ue746"
         onClicked: {
             calendarBody.roteMonth(1);
         }

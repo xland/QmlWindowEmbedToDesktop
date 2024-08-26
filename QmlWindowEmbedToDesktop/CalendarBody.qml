@@ -26,7 +26,7 @@ Repeater {
             }
             Text{
                 id:dayNumText
-                color:modelData.isCurMonth? "#FF1F2329":"#ff666666"
+                color:modelData.isCurMonth? "#FF1F2329":"#FF666666"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 8

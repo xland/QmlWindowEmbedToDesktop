@@ -36,7 +36,7 @@ Rectangle {
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            text: "\uf141"
+            text: "\ue6e8"
         }
         MouseArea {
             anchors.fill: parent

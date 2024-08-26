@@ -40,7 +40,7 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
             ListHeader.qml
             ListBody.qml
         RESOURCES
-            fa-solid-900.ttf
+            iconfont.ttf
             Calendar.js
     )
 endif()

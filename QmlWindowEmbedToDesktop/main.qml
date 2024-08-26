@@ -33,7 +33,7 @@ Window {
     }
     FontLoader {
         id: fontLoader
-        source: "fa-solid-900.ttf"
+        source: "iconfont.ttf"
     }
     Rectangle {
         id: bg

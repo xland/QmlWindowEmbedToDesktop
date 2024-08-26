@@ -72,11 +72,29 @@
           "checksum": "IcvJpyzg0L5RZkQV+Lieu3LS8Ak="
         }
       }
+    },
+    {
+      "hidden": true,
+      "name": "qt5.15.2",
+      "inherits": "Qt",
+      "environment": {
+        "QTDIR": "D:/tool/FUCK/5.15.2/msvc2019"
+      },
+      "architecture": {
+        "strategy": "external",
+        "value": "x86"
+      },
+      "generator": "Ninja",
+      "vendor": {
+        "qt-project.org/Version": {
+          "checksum": "Xz8Ry831BTTbKwf0NKfS4ATMrZA="
+        }
+      }
     }
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "uPAUfUcYkH6vx6kLSKR8yI2VW2U="
+      "checksum": "Ni3LDOPt980/o1BRoyCRbyURXPY="
     }
   }
 }
