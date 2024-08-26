@@ -2,3 +2,7 @@
 /.vs/
 /QmlWindowEmbedToDesktop/.vs/
 /QmlWindowEmbedToDesktop/out/
+/Release/
+/Debug/
+/QmlWindowEmbedToDesktop/Release/
+/QmlWindowEmbedToDesktop/Debug/
