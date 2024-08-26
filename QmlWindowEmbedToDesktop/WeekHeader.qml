@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 2.15
 
 Repeater {
     model: ["日", "一", "二","三", "四", "五","六"]

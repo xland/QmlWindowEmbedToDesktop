@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Controls
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Rectangle {
     id:listBody
@@ -80,8 +80,8 @@ Rectangle {
                 color:"#00000000"
                 Rectangle {
                     id:leftBorder
-                    topLeftRadius: 18
-                    bottomLeftRadius: 18
+                    // topLeftRadius: 18
+                    // bottomLeftRadius: 18
                     width:3
                     color:"#FF4A53E7"
                     height:48

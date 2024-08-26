@@ -7,6 +7,7 @@
 #include <qcoreapplication.h>
 #include <qscreen.h>
 #include <QScreen>
+#include <array>
 
 namespace {
 	HWND workerW{ nullptr };
@@ -167,6 +168,7 @@ void EmbedHelper::Embed() {
             }, NULL);
     }
     SetParent(tarHwnd, workerW);
+    SetWindowLong(tarHwnd, GWL_EXSTYLE, GetWindowLong(tarHwnd, GWL_EXSTYLE) | WS_EX_TOPMOST);
     roteInput();
     GetWindowRect(tarHwnd, &tarRect);
     isEmbeded = true;

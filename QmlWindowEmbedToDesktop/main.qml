@@ -1,9 +1,9 @@
-import QtQuick
-import QtQuick.Window
+import QtQuick 2.15
+import QtQuick.Window 2.15
 
 Window {
     id:root
-    flags: Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint | Qt.ToolTip | Qt.WindowStaysOnTopHint | Qt.Popup
     color: "#00000000"
     visible: true
     width: 580
