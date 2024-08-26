@@ -26,7 +26,7 @@ Rectangle {
         }
     }
     component IconBtn: Rectangle {
-        property string iconCode:"\uf053"
+        property string iconCode:"\ue709"
         color: "#00000000"
         anchors.top: parent.top
         anchors.topMargin:4

@@ -22,7 +22,7 @@ Repeater {
             color:"#00000000"
             border {
                 width: 1
-                color: "#ffF02C38"
+                color: "#FFF02C38"
             }
             Text{
                 id:dayNumText
@@ -35,7 +35,7 @@ Repeater {
             }
             Text{
                 id:dayText
-                color:"#ff4C4F54"
+                color:"#FF4C4F54"
                 anchors.top: dayNumText.bottom
                 anchors.topMargin: -5
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -43,7 +43,7 @@ Repeater {
                 text:"廿八"
             }
             Text{
-                color:"#ffff0000"
+                color:"#FFFF0000"
                 font.pixelSize: 10
                 anchors.top: parent.top
                 anchors.right: parent.right

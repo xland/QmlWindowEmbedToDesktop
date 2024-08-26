@@ -4,7 +4,7 @@ Rectangle {
     id:switchBtn
     function mouseMove(x,y){
         if(isMouseIn(switchBtn,x,y)){
-            switchBtn.color = "#bbffffff";
+            switchBtn.color = "#BBFFFFFF";
         } else {
             switchBtn.color = "#00000000";
         }
@@ -19,7 +19,7 @@ Rectangle {
     radius:3
     Text {
         id:showJobText
-        color:"#ff007AFF"
+        color:"#FF007AFF"
         font.pixelSize: 20
         anchors.left:parent.left
         anchors.leftMargin:8
@@ -29,19 +29,19 @@ Rectangle {
     Text {
         id:showJobIcon
         font.family: fontLoader.name
-        color:"#ff007AFF"
+        color:"#FF007AFF"
         font.pixelSize: 20
         anchors.left:showJobText.right
         anchors.leftMargin:4
         anchors.verticalCenter: parent.verticalCenter
-        text: "\uf078"
+        text: "\ue70f"
     }
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onEntered: {
-            parent.color = "#bbffffff";
+            parent.color = "#BBFFFFFF";
         }
         onExited: {
             parent.color = "#00000000";
@@ -50,10 +50,10 @@ Rectangle {
             list.visible = !list.visible;
             if(list.visible){
                 root.height = 860;
-                showJobIcon.text = "\uf077"
+                showJobIcon.text = "\ue708"
             }else{
                 root.height = 580;
-                showJobIcon.text = "\uf078"
+                showJobIcon.text = "\ue70f"
             }
             parent.color = "#00000000";
             embedHelper.WinResized();

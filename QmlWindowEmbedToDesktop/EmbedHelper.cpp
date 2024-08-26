@@ -153,29 +153,31 @@ EmbedHelper* EmbedHelper::Init(QObject* _root) {
 }
 
 void EmbedHelper::Embed() { 
-    if (!workerW) {
-        desktopHwnd = GetDesktopWindow();
-        shellHwnd = GetShellWindow();
-        SendMessage(shellHwnd, 0x052C, 0x0000000D, 0);
-        SendMessage(shellHwnd, 0x052C, 0x0000000D, 1);
-        EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
-            HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
-            if (shellDllDefView != nullptr) {
-                workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
-            }
-            return TRUE;
-            }, NULL);
+    if (isEmbeded) {
+        SetWindowLongPtr(tarHwnd, GWLP_WNDPROC, (LONG_PTR)OldProc);
+        SetParent(tarHwnd, nullptr);
+        isEmbeded = false;
     }
-    SetParent(tarHwnd, workerW);
-    roteInput();
-    GetWindowRect(tarHwnd, &tarRect);
-    isEmbeded = true;
-}
-void EmbedHelper::UnEmbed()
-{
-    SetWindowLongPtr(tarHwnd, GWLP_WNDPROC, (LONG_PTR)OldProc);
-    SetParent(tarHwnd, nullptr);
-    isEmbeded = false;
+    else {
+        if (!workerW) {
+            desktopHwnd = GetDesktopWindow();
+            shellHwnd = GetShellWindow();
+            SendMessage(shellHwnd, 0x052C, 0x0000000D, 0);
+            SendMessage(shellHwnd, 0x052C, 0x0000000D, 1);
+            EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
+                HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
+                if (shellDllDefView != nullptr) {
+                    workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
+                }
+                return TRUE;
+                }, NULL);
+        }
+        SetParent(tarHwnd, workerW);
+        roteInput();
+        GetWindowRect(tarHwnd, &tarRect);
+        isEmbeded = true;
+    }
+
 }
 void EmbedHelper::WinResized()
 {

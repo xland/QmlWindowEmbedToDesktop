@@ -1,5 +1,5 @@
 ﻿import QtQuick
-import QtQuick.Controls 2.15
+import QtQuick.Controls
 
 Rectangle {
     x: 0
@@ -31,7 +31,7 @@ Rectangle {
         color: "#00000000"
         antialiasing:true
         Text{
-            color:"#ff646A73";
+            color:"#FF646A73";
             font.family: fontLoader.name
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
@@ -63,12 +63,12 @@ Rectangle {
         color: "#00000000"
         Text{
             id:pinIcon
-            color:"#ff646A73";
+            color:"#FF646A73";
             font.family: fontLoader.name
             font.pixelSize: 12
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            text: "\uf08d"
+            text: "\ue70c"
         }
         MouseArea {
             anchors.fill: parent
@@ -80,13 +80,7 @@ Rectangle {
                 parent.color = "#00000000";
             }
             onClicked:{
-                if(pinIcon.text == "\uf08d"){
-                    embedHelper.Embed();
-                    pinIcon.text = "\ue68f"
-                }else{
-                    embedHelper.UnEmbed();
-                    pinIcon.text = "\uf08d"
-                }
+                embedHelper.Embed();
             }
         }
     }
