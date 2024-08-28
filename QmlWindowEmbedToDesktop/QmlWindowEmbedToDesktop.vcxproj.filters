@@ -32,6 +32,41 @@
     <None Include="main.qml">
       <Filter>Source Files</Filter>
     </None>
-
+    <ClCompile Include="EmbedHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="todo.md" />
+    <None Include="ListHeader.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Calendar.js" />
+    <None Include="CalendarBody.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="CalendarHeader.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="ListBody.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="SwitchBtn.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="TitleBar.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="WeekHeader.qml">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="iconfont.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="EmbedHelper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

@@ -1,5 +1,14 @@
 <RCC>
     <qresource prefix="/qt/qml/qmlwindowembedtodesktop">
         <file>main.qml</file>
+        <file>Calendar.js</file>
+        <file>CalendarBody.qml</file>
+        <file>CalendarHeader.qml</file>
+        <file>iconfont.ttf</file>
+        <file>ListBody.qml</file>
+        <file>ListHeader.qml</file>
+        <file>SwitchBtn.qml</file>
+        <file>TitleBar.qml</file>
+        <file>WeekHeader.qml</file>
     </qresource>
 </RCC>
