@@ -6,7 +6,7 @@
 #include <EmbedHelper.h>
 #include <qquickitem.h>
 
-//windeployqt QmlWindowEmbedToDesktop.exe  -qmldir  D:\tool\FUCK\6.7.1\msvc2019\qml
+//windeployqt QmlWindowEmbedToDesktop.exe  -qmldir  D:\tool\FUCK\6.7.1\msvc2019_64\qml
 
 int main(int argc, char *argv[])
 {

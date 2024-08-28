@@ -177,7 +177,6 @@ void EmbedHelper::Embed() {
         GetWindowRect(tarHwnd, &tarRect);
         isEmbeded = true;
     }
-
 }
 void EmbedHelper::WinResized()
 {
