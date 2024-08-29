@@ -13,6 +13,7 @@ namespace {
     HWND shellHwnd{ nullptr };
     HWND desktopHwnd{ nullptr };
 	HWND tarHwnd{ nullptr };
+    HWND sysListView32HWND{ nullptr };
     bool isEmbeded{ false };
     std::vector<wchar_t> buf(18);
     QQuickWindow* window;
@@ -168,13 +169,22 @@ void EmbedHelper::Embed() {
                 HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
                 if (shellDllDefView != nullptr) {
                     workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
+                    sysListView32HWND = FindWindowEx(shellDllDefView, NULL, L"SysListView32", NULL);
                 }
                 return TRUE;
                 }, NULL);
         }
         SetParent(tarHwnd, workerW);
-        roteInput();
-        GetWindowRect(tarHwnd, &tarRect);
+        //roteInput();
+        //GetWindowRect(tarHwnd, &tarRect);
+
+        DWORD workerWThreadId = GetWindowThreadProcessId(sysListView32HWND, nullptr);
+        DWORD targetThreadId = GetWindowThreadProcessId(tarHwnd, nullptr);
+        auto flag = AttachThreadInput(workerWThreadId, targetThreadId, TRUE);
+        SetForegroundWindow(tarHwnd);
+        SetFocus(tarHwnd);
+
+
         isEmbeded = true;
     }
 }

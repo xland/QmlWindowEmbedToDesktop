@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Window
 import QtWebSockets
 
@@ -38,20 +39,19 @@ Window {
     }
     WebSocket {
         id: wsocket
-        url: "ws://124.222.224.186:8800"
         onTextMessageReceived: function(message) {
             console.log("\nReceived message: !!!!!!!!!!!!!!!!!!!!" + message)
         }
         onStatusChanged: {
-            if (socket.status == WebSocket.Error) {
+            if (wsocket.status == WebSocket.Error) {
                 console.log("!!!!!!!!!!!!!!!!!!!!!!Error: " + socket.errorString)
-            } else if (socket.status == WebSocket.Open) {
-                socket.sendTextMessage("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            } else if (socket.status == WebSocket.Closed) {
+            } else if (wsocket.status == WebSocket.Open) {
+                wsocket.sendTextMessage("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            } else if (wsocket.status == WebSocket.Closed) {
                 "\nSocket closed!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             }
         }
-        active: true
+        active: false
     }
     Rectangle {
         id: bg
@@ -110,6 +110,46 @@ Window {
         }
         SwitchBtn {
             id: switchBtn
+        }
+    }
+    Dialog {
+        id: dialog
+        visible: false
+        width: 300
+        height: 200
+        modal: true
+        title: "My Dialog"
+        Column {
+            anchors.fill: parent
+            spacing: 10
+            Text {
+                id:dialogText
+                text: "This is a dialog."
+                width: parent.width
+                wrapMode: Text.Wrap
+            }
+            Button {
+                text: "Close"
+                width: parent.width
+                onClicked: {
+                    dialog.visible = false;
+                }
+            }
+        }
+    }
+    Component.onCompleted: {
+        for(let i=0;i<Qt.application.arguments.length;i++){
+            let arr = Qt.application.arguments[i].split('_');
+            if(arr.length === 2){
+                let url = `ws://127.0.0.1:${arr[1]}/${arr[0]}`
+                //url = "ws://124.222.224.186:8800"
+                wsocket.url = url;
+                wsocket.active = true;
+                console.log(url);
+                dialogText.text = url;
+                dialog.visible = true;
+                break;
+            }
         }
     }
 }
