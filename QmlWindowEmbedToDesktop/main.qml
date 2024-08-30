@@ -12,7 +12,7 @@ Window {
     height: 580  //580,860
     title: "QtEmbededWindow"
     function isMouseIn(ele,x,y){
-        var pos = ele.mapToItem(null, 0, 0);
+        let pos = ele.mapToItem(null, 0, 0);
         let flag = (x>pos.x && x < pos.x+ele.width && y>pos.y && y<pos.y+ele.height)
         return flag;
     }
@@ -22,6 +22,7 @@ Window {
     function moveFunc(x,y){
         titleBar.mouseMove(x,y)
         calendarHeader.mouseMove(x,y)
+        calendarBody.mouseMove(x,y)
         switchBtn.mouseMove(x,y)
         listBody.mouseMove(x,y)
     }
