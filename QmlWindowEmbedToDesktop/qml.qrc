@@ -10,5 +10,6 @@
         <file>SwitchBtn.qml</file>
         <file>TitleBar.qml</file>
         <file>WeekHeader.qml</file>
+        <file>Conn.qml</file>
     </qresource>
 </RCC>

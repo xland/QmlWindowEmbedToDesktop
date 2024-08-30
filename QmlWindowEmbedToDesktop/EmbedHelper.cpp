@@ -97,7 +97,7 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                 {
                     case RI_MOUSE_LEFT_BUTTON_DOWN:
                     {
-                        PostMessage(tarHwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+                        //PostMessage(tarHwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
                         point.x = point.x / ratio;
                         point.y = point.y / ratio;
                         QMetaObject::invokeMethod(window, "downFunc", Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
@@ -105,7 +105,7 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                     }
                     case RI_MOUSE_LEFT_BUTTON_UP:
                     {
-                        PostMessage(tarHwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+                        //PostMessage(tarHwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
                         point.x = point.x / ratio;
                         point.y = point.y / ratio;
                         QMetaObject::invokeMethod(window, "upFunc", Q_ARG(QVariant, (int)point.x), Q_ARG(QVariant, (int)point.y));
@@ -175,17 +175,15 @@ void EmbedHelper::Embed() {
                 }, NULL);
         }
         SetParent(tarHwnd, workerW);
-        //roteInput();
-        //GetWindowRect(tarHwnd, &tarRect);
-
-        DWORD workerWThreadId = GetWindowThreadProcessId(sysListView32HWND, nullptr);
-        DWORD targetThreadId = GetWindowThreadProcessId(tarHwnd, nullptr);
-        auto flag = AttachThreadInput(workerWThreadId, targetThreadId, TRUE);
-        SetForegroundWindow(tarHwnd);
-        SetFocus(tarHwnd);
-
-
+        roteInput();
+        GetWindowRect(tarHwnd, &tarRect);
         isEmbeded = true;
+
+        //DWORD workerWThreadId = GetWindowThreadProcessId(sysListView32HWND, nullptr);
+        //DWORD targetThreadId = GetWindowThreadProcessId(tarHwnd, nullptr);
+        //auto flag = AttachThreadInput(workerWThreadId, targetThreadId, TRUE);
+        //SetForegroundWindow(tarHwnd);
+        //SetFocus(tarHwnd);
     }
 }
 void EmbedHelper::WinResized()

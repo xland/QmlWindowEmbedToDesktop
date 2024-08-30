@@ -3,8 +3,7 @@ import "Calendar.js" as Calendar
 Repeater {
     model: []
     function roteMonth(val){
-        model = Calendar.getOneMonthDate(val);
-        calendarHeader.setYearMonth(Calendar.tarDate)
+        //model = Calendar.getOneMonthDate(val);
     }
     Rectangle {
         x:(index%7)*(body.width/7)+11
@@ -22,16 +21,16 @@ Repeater {
             color:"#00000000"
             border {
                 width: 1
-                color: "#FFF02C38"
+                color: modelData.isToday?"#FFF02C38":"#00000000"
             }
             Text{
                 id:dayNumText
-                color:modelData.isCurMonth? "#FF1F2329":"#FF666666"
+                color:modelData.type === 'currt'? "#FF1F2329":"#FF666666"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 8
                 font.pixelSize: 20
-                text:modelData.day
+                text:modelData.date
             }
             Text{
                 id:dayText
@@ -40,7 +39,7 @@ Repeater {
                 anchors.topMargin: -5
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: 12
-                text:"廿八"
+                text:modelData.lunarInfo
             }
             Text{
                 color:"#FFFF0000"
@@ -49,7 +48,7 @@ Repeater {
                 anchors.right: parent.right
                 anchors.topMargin: 8
                 anchors.rightMargin: 7
-                text:"休"
+                text:modelData.docStatus
             }
             Rectangle {
                 height:6

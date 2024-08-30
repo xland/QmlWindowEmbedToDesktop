@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
-import QtWebSockets
+
 
 Window {
     id:root
@@ -12,8 +12,6 @@ Window {
     height: 580  //580,860
     title: "QtEmbededWindow"
     function isMouseIn(ele,x,y){
-        //let flag = (x>ele.x && x < ele.x+ele.width && y>ele.y && y<ele.y+ele.height)
-        //return flag;
         var pos = ele.mapToItem(null, 0, 0);
         let flag = (x>pos.x && x < pos.x+ele.width && y>pos.y && y<pos.y+ele.height)
         return flag;
@@ -28,6 +26,10 @@ Window {
         listBody.mouseMove(x,y)
     }
     function downFunc(x,y){
+        titleBar.mouseDown(x,y)
+        listBody.mouseDown(x,y)
+        calendarHeader.mouseDown(x,y)
+        switchBtn.mouseDown(x,y)
         listBody.mouseDown(x,y)
     }
     function upFunc(x,y){
@@ -37,22 +39,6 @@ Window {
         id: fontLoader
         source: "iconfont.ttf"
     }
-    WebSocket {
-        id: wsocket
-        onTextMessageReceived: function(message) {
-            console.log("\nReceived message: !!!!!!!!!!!!!!!!!!!!" + message)
-        }
-        onStatusChanged: {
-            if (wsocket.status == WebSocket.Error) {
-                console.log("!!!!!!!!!!!!!!!!!!!!!!Error: " + socket.errorString)
-            } else if (wsocket.status == WebSocket.Open) {
-                wsocket.sendTextMessage("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            } else if (wsocket.status == WebSocket.Closed) {
-                "\nSocket closed!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-            }
-        }
-        active: false
-    }
     Rectangle {
         id: bg
         x: 0
@@ -60,7 +46,7 @@ Window {
         width: parent.width
         height: parent.height
         radius: 4
-        color: "#99FFFFFF"  
+        color: "#BBEEEEEE"  
         antialiasing:true
         border {
             width: 0.5
@@ -112,44 +98,7 @@ Window {
             id: switchBtn
         }
     }
-    Dialog {
-        id: dialog
-        visible: false
-        width: 300
-        height: 200
-        modal: true
-        title: "My Dialog"
-        Column {
-            anchors.fill: parent
-            spacing: 10
-            Text {
-                id:dialogText
-                text: "This is a dialog."
-                width: parent.width
-                wrapMode: Text.Wrap
-            }
-            Button {
-                text: "Close"
-                width: parent.width
-                onClicked: {
-                    dialog.visible = false;
-                }
-            }
-        }
-    }
-    Component.onCompleted: {
-        for(let i=0;i<Qt.application.arguments.length;i++){
-            let arr = Qt.application.arguments[i].split('_');
-            if(arr.length === 2){
-                let url = `ws://127.0.0.1:${arr[1]}/${arr[0]}`
-                //url = "ws://124.222.224.186:8800"
-                wsocket.url = url;
-                wsocket.active = true;
-                console.log(url);
-                dialogText.text = url;
-                dialog.visible = true;
-                break;
-            }
-        }
+    Conn{
+        id:conn    
     }
 }

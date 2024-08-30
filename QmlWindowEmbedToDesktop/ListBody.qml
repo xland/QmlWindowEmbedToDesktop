@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 Rectangle {
     id:listBody
+    property var listBodyData:[]
     property real totalHeight:18*56
     property real position: 0
     property bool mouseInFlag:false
@@ -67,7 +68,7 @@ Rectangle {
     clip:true
     Repeater {
         id:listRepeater
-        model: 18
+        model: listBodyData
         delegate: Rectangle {
             y:-listBody.position * (totalHeight - listBody.height) + 56 * index
             width: parent.width
@@ -96,7 +97,7 @@ Rectangle {
                     anchors.rightMargin: 8
                     color:"#FF1F2329"
                     elide: Text.ElideRight
-                    text: (index + 1)+"这是日记内容的标题，诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！"
+                    text: modelData.title
                 }
                 Text {
                     anchors.top: title.bottom
@@ -108,7 +109,7 @@ Rectangle {
                     font.pixelSize: 14
                     color:"#FF666666"
                     elide: Text.ElideRight
-                    text: (index + 1)+"这是日记内容的内容，诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！诸事顺遂！"
+                    text: modelData.desc
                 }
                 MouseArea {
                     anchors.fill: parent

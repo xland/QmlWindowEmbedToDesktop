@@ -60,6 +60,9 @@
     <None Include="WeekHeader.qml">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="Conn.qml">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Font Include="iconfont.ttf" />

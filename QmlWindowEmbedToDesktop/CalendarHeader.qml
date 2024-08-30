@@ -9,9 +9,7 @@ Rectangle {
     height:40
     property string yearMonthText
     function setYearMonth(curDate){
-        let year = curDate.getFullYear();
-        let month = curDate.getMonth()+1;
-        yearMonthText = `${year}年${month}月`;
+
     }
     function mouseMove(x,y){
         if(isMouseIn(goPreMonthBtn,x,y)){

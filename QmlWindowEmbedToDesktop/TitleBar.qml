@@ -20,6 +20,14 @@ Rectangle {
             pin.color = "#00000000";
         }
     }
+    function mouseDown(x,y){
+        if(isMouseIn(settingBtn,x,y)){
+            Qt.quit();
+        }
+        if(isMouseIn(pin,x,y)){
+            embedHelper.Embed();
+        }
+    }
     Rectangle {
         id: settingBtn
         y:10

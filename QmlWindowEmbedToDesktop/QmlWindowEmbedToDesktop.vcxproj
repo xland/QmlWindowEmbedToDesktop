@@ -108,6 +108,7 @@
     <None Include="Calendar.js" />
     <None Include="CalendarBody.qml" />
     <None Include="CalendarHeader.qml" />
+    <None Include="Conn.qml" />
     <None Include="ListBody.qml" />
     <None Include="ListHeader.qml" />
     <None Include="SwitchBtn.qml" />
