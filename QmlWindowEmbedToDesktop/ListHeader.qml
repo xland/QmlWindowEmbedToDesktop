@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 
 Rectangle {
 	width:parent.width
@@ -16,6 +17,12 @@ Rectangle {
         height:parent.height
         color:"#00000000"
         radius:3
+        ToolTip {
+            text: "新建日程"
+            visible: mouseArea.containsMouse
+            delay: 500 // 延迟显示工具提示的时间（以毫秒为单位）
+            timeout: 5000 // 工具提示显示的时间（以毫秒为单位）
+        }
         Text{
             color:"#ff007AFF"
             font.pixelSize: 36
@@ -24,6 +31,7 @@ Rectangle {
             text: "\u002b"
         }
         MouseArea {
+            id:mouseArea
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor

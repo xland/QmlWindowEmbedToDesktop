@@ -9,6 +9,23 @@ Rectangle {
             switchBtn.color = "#00000000";
         }
     }
+    function mouseDown(x,y){
+        if(isMouseIn(switchBtn,x,y)){
+            switchList();
+        }
+    }
+    function switchList(){
+        list.visible = !list.visible;
+        if(list.visible){
+            root.height = 860;
+            showJobIcon.text = "\ue708"
+        }else{
+            root.height = 580;
+            showJobIcon.text = "\ue70f"
+        }
+        switchBtn.color = "#00000000";
+        embedHelper.WinResized();
+    }
     anchors.right:bg.right
     anchors.rightMargin:26
     height:42
@@ -47,16 +64,7 @@ Rectangle {
             parent.color = "#00000000";
         }
         onPressed: {
-            list.visible = !list.visible;
-            if(list.visible){
-                root.height = 860;
-                showJobIcon.text = "\ue708"
-            }else{
-                root.height = 580;
-                showJobIcon.text = "\ue70f"
-            }
-            parent.color = "#00000000";
-            embedHelper.WinResized();
+            switchList();
         }
     }
 }

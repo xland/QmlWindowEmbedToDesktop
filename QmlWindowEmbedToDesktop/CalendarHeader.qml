@@ -23,6 +23,9 @@ Rectangle {
             goNextMonthBtn.color = "#00000000";
         }
     }
+    function mouseDown(x,y){
+        
+    }
     component IconBtn: Rectangle {
         property string iconCode:"\ue709"
         color: "#00000000"

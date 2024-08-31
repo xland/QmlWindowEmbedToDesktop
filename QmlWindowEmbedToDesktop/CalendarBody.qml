@@ -17,7 +17,6 @@ Repeater {
         for(let i=0;i<42;i++){
             let item = calendarBody.itemAt(i).children[0];
             if(isMouseIn(item,x,y)){
-                console.log(hoverIndex,i)
                 if(hoverIndex != i){
                     item.color = "#88985321"
                     if(hoverIndex != -1){
@@ -46,6 +45,16 @@ Repeater {
             border {
                 width: 1
                 color: modelData.isToday?"#FFF02C38":"#00000000"
+            }
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: {
+                    parent.color = "#88985321";
+                }
+                onExited: {
+                    parent.color = "#00000000";
+                }
             }
             Text{
                 id:dayNumText
@@ -81,16 +90,6 @@ Repeater {
                 anchors.horizontalCenter: parent.horizontalCenter
                 color:"#88FF00FF"
                 radius:6
-            }
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: {
-                    parent.color = "#88985321";
-                }
-                onExited: {
-                    parent.color = "#00000000";
-                }
             }
         }
     }
