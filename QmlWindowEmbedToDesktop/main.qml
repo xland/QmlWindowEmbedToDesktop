@@ -105,4 +105,8 @@ Window {
     Conn{
         id:conn    
     }
+    Component.onCompleted: {
+        x = Screen.width - width - 20
+        y = 20
+    }
 }

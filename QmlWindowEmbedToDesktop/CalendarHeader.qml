@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 
 Rectangle {
     color: "#00000000"
@@ -28,6 +29,7 @@ Rectangle {
     }
     component IconBtn: Rectangle {
         property string iconCode:"\ue709"
+        property string toolTipText:"上个月"
         color: "#00000000"
         anchors.top: parent.top
         anchors.topMargin:4
@@ -47,7 +49,23 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             text: iconCode
         }
+        ToolTip {
+            id:toolTip
+            text: toolTipText
+            visible: mouseArea.containsMouse
+            delay: 600
+            timeout: 6000
+            background: Rectangle {
+                color: "#FF1A1A1A"
+                radius: 4
+            }
+            contentItem: Text {
+                text: toolTip.text
+                color: "#FFFFFFFF"
+            }
+        }
         MouseArea {
+            id:mouseArea
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
@@ -86,6 +104,7 @@ Rectangle {
         id:goNextMonthBtn
         anchors.right: parent.right
         iconCode:"\ue746"
+        toolTipText:"下个月"
         onClicked: {
             calendarBody.roteMonth(1);
         }
