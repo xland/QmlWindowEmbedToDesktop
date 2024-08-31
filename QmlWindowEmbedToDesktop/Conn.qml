@@ -9,7 +9,7 @@ WebSocket {
             if(obj.msgName === 'updateRenderData'){
                 calendarHeader.yearMonthText = obj.data.activeDateMonth
                 calendarBody.model = obj.data.viewData
-                listBody.listBodyData = obj.data.scheduleList
+                listBody.setListData(obj.data.scheduleList)
             }        
         }
     } 

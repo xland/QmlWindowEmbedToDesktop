@@ -4,7 +4,7 @@ import QtQuick.Controls
 Rectangle {
     id:listBody
     property var listBodyData:[]
-    property real totalHeight:18*56
+    property real totalHeight:0
     property real position: 0
     property bool mouseInFlag:false
     property bool mouseInThumb:false
@@ -58,6 +58,11 @@ Rectangle {
                 item.children[0].color = "#00000000"
             }
         }
+    }
+    function setListData(data){
+        listBodyData = data;
+        totalHeight = data.length*56;
+        scroller.visible = totalHeight > (860-580)
     }
     anchors.top: listHeader.bottom
     anchors.topMargin: 8
@@ -124,7 +129,8 @@ Rectangle {
             }
         }
     } 
-    Rectangle {        
+    Rectangle {
+        id:scroller
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -132,6 +138,7 @@ Rectangle {
         radius:2
         width:6
         color:"#08000000"
+        visible:false
         Rectangle {
             id:thumb
             anchors.right: parent.right

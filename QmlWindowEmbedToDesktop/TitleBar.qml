@@ -98,11 +98,11 @@ Rectangle {
         anchors.leftMargin: 0
         anchors.rightMargin: 0
         height: parent.height
-        onPressed: {
+        onPressed: function(mouse){
             winPos.x = mouse.x;
             winPos.y = mouse.y;
         }
-        onPositionChanged: {
+        onPositionChanged: function(mouse){
             if (pressedButtons === Qt.LeftButton) {
                 root.x += mouse.x - winPos.x;
                 root.y += mouse.y - winPos.y;
