@@ -17,7 +17,6 @@ Rectangle {
     function switchList(){
         list.visible = !list.visible;
         if(list.visible){
-            console.log("/n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!",listBody.totalHeight)
             root.height = Math.min(860, 580+listBody.totalHeight+60);
             showJobIcon.text = "\ue708"
         }else{

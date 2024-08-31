@@ -99,6 +99,9 @@ Window {
             id: switchBtn
         }
     }
+    ToolTip{
+        id:toolTip
+    }
     Conn{
         id:conn    
     }

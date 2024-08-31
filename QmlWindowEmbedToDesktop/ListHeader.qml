@@ -18,17 +18,27 @@ Rectangle {
         color:"#00000000"
         radius:3
         ToolTip {
+            id:toolTip
             text: "新建日程"
             visible: mouseArea.containsMouse
-            delay: 500 // 延迟显示工具提示的时间（以毫秒为单位）
-            timeout: 5000 // 工具提示显示的时间（以毫秒为单位）
+            delay: 600
+            timeout: 6000
+            background: Rectangle {
+                color: "#FF1A1A1A"
+                radius: 4
+            }
+            contentItem: Text {
+                text: toolTip.text
+                color: "#FFFFFFFF"
+            }
         }
         Text{
             color:"#ff007AFF"
-            font.pixelSize: 36
+            font.family: fontLoader.name
+            font.pixelSize: 22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            text: "\u002b"
+            text: "\ue70b"
         }
         MouseArea {
             id:mouseArea

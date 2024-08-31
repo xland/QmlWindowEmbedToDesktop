@@ -114,6 +114,7 @@
     <None Include="SwitchBtn.qml" />
     <None Include="TitleBar.qml" />
     <None Include="todo.md" />
+    <None Include="ToolTip.qml" />
     <None Include="WeekHeader.qml" />
     <QtRcc Include="qml.qrc" />
     <None Include="main.qml" />

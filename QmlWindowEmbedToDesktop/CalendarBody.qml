@@ -18,7 +18,7 @@ Repeater {
             let item = calendarBody.itemAt(i).children[0];
             if(isMouseIn(item,x,y)){
                 if(hoverIndex != i){
-                    item.color = "#88985321"
+                    item.color = "#88FFFFFF"
                     if(hoverIndex != -1){
                         calendarBody.itemAt(hoverIndex).children[0].color = "#00000000"
                     }                    
@@ -50,7 +50,7 @@ Repeater {
                 anchors.fill: parent
                 hoverEnabled: true
                 onEntered: {
-                    parent.color = "#88985321";
+                    parent.color = "#88FFFFFF";
                 }
                 onExited: {
                     parent.color = "#00000000";
@@ -61,7 +61,7 @@ Repeater {
                 color:modelData.type === 'currt'? "#FF1F2329":"#FF666666"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 8
+                anchors.topMargin: 6
                 font.pixelSize: 20
                 text:modelData.date
             }
@@ -69,7 +69,7 @@ Repeater {
                 id:dayText
                 color:"#FF4C4F54"
                 anchors.top: dayNumText.bottom
-                anchors.topMargin: -5
+                anchors.topMargin: -3
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: 12
                 text:modelData.lunarInfo
@@ -88,7 +88,7 @@ Repeater {
                 width:6
                 anchors.top: dayText.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                color:"#88FF00FF"
+                color:"#FF797B7F"
                 radius:6
             }
         }

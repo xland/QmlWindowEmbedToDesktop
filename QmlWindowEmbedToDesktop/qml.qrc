@@ -11,5 +11,6 @@
         <file>TitleBar.qml</file>
         <file>WeekHeader.qml</file>
         <file>Conn.qml</file>
+        <file>ToolTip.qml</file>
     </qresource>
 </RCC>

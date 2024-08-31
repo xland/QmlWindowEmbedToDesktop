@@ -47,8 +47,10 @@ Rectangle {
                 let pos = item.mapToItem(null, 0, 0);
                 if(y>pos.y && y<pos.y+item.height){
                     item.children[0].color = "#88ffffff"
+                    item.children[0].children[3].visible = true
                 }else{
                     item.children[0].color = "#00000000"
+                    item.children[0].children[3].visible = false
                 }
             }
         }else if(mouseInFlag){
@@ -56,6 +58,7 @@ Rectangle {
             for(let i=0;i<listRepeater.count;i++){
                 let item = listRepeater.itemAt(i)
                 item.children[0].color = "#00000000"
+                item.children[0].children[3].visible = false
             }
         }
     }
@@ -84,6 +87,7 @@ Rectangle {
                 width: parent.width
                 height:48
                 color:"#00000000"
+                radius:3
                 Rectangle {
                     id:leftBorder
                     topLeftRadius: 18
@@ -116,14 +120,111 @@ Rectangle {
                     elide: Text.ElideRight
                     text: modelData.desc
                 }
+                Rectangle{
+                    id:btnBox
+                    z:88
+                    visible:false
+                    width:48
+                    height:48
+                    color:"#00000000"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 6
+                    Rectangle {
+                        id:delBtn
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        width:28
+                        height:24
+                        color:"#00FFFFFF"
+                        radius:3
+                        ToolTip {
+                            id:delToolTip
+                            text: "删除日程"
+                            visible: false
+                            delay: 600
+                            timeout: 6000
+                            background: Rectangle {
+                                color: "#FF1A1A1A"
+                                radius: 4
+                            }
+                            contentItem: Text {
+                                text: delToolTip.text
+                                color: "#FFFFFFFF"
+                            }
+                        }
+                        Text {
+                            font.family: fontLoader.name
+                            anchors.centerIn: parent
+                            font.pixelSize: 14
+                            color:"#FF333333"
+                            text: "\ue712"
+                        }
+                    }
+                    Rectangle {
+                        id:editBtn
+                        anchors.right: delBtn.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        radius:3
+                        width:28
+                        height:24
+                        color:"#00000000"
+                        ToolTip {
+                            id:editToolTip
+                            text: "编辑日程"
+                            visible: false
+                            delay: 600
+                            timeout: 6000
+                            background: Rectangle {
+                                color: "#FF1A1A1A"
+                                radius: 4
+                            }
+                            contentItem: Text {
+                                text: delToolTip.text
+                                color: "#FFFFFFFF"
+                            }
+                        }
+                        Text {
+                            font.family: fontLoader.name
+                            anchors.centerIn: parent
+                            font.pixelSize: 14
+                            color:"#FF333333"
+                            text: "\ue707"
+                        }
+                    }
+                }
                 MouseArea {
+                    z:2
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: {
                         parent.color = "#88ffffff";
+                        btnBox.visible = true;
+                    }
+                    onPositionChanged:function(mouse){
+                        if(mouse.x>btnBox.x+delBtn.x && 
+                            mouse.x < btnBox.x+delBtn.x+delBtn.width && 
+                            mouse.y > btnBox.y+delBtn.y && 
+                            mouse.y < btnBox.y+delBtn.y+delBtn.height){
+                            delBtn.color = "#BBFFFFFF"
+                            delToolTip.visible = true
+                        }else{
+                            delBtn.color = "#00000000"
+                            delToolTip.visible = false
+                        }
+                        if(mouse.x>btnBox.x+editBtn.x && 
+                            mouse.x < btnBox.x+editBtn.x+editBtn.width && 
+                            mouse.y > btnBox.y+editBtn.y && 
+                            mouse.y < btnBox.y+editBtn.y+editBtn.height){
+                            editBtn.color = "#BBFFFFFF"
+                            editToolTip.visible = true
+                        }else{
+                            editBtn.color = "#00000000"
+                            editToolTip.visible = false
+                        }
                     }
                     onExited: {
                         parent.color = "#00000000";
+                        btnBox.visible = false;
                     }
                 }
             }
@@ -134,7 +235,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        z:6
+        z:66
         radius:2
         width:6
         color:"#08000000"
