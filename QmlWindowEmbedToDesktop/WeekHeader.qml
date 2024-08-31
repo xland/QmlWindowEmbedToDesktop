@@ -1,7 +1,7 @@
 import QtQuick
 
 Repeater {
-    model: ["日", "一", "二","三", "四", "五","六"]
+    model: []
     Rectangle {
         x:index*(body.width/7)
         height:50
