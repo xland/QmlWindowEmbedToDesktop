@@ -9,13 +9,13 @@ Rectangle {
     width:bg.width
     color: "#00000000"
     property point winPos: Qt.point(0, 0)
-    property bool isEmbeded:false
     function mouseMove(x,y){
         if(isMouseIn(settingBtn,x,y)){
             settingBtn.color = "#28000000";
         } else {
             settingBtn.color = "#00000000";
         }
+        if(embedHelper.IsEmbed()) return;
         if(isMouseIn(pin,x,y)){
             pin.color = "#28000000";
         } else {
@@ -84,18 +84,16 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                if(titleBar.isEmbeded) return;
+                if(embedHelper.IsEmbed()) return;
                 parent.color = "#28000000";
             }
             onExited: {
-                console.log("!!!!!!!!!!!!!!!!!!!!!",titleBar.isEmbeded)
-                if(titleBar.isEmbeded) return;
+                if(embedHelper.IsEmbed()) return;
                 parent.color = "#00000000";
             }
             onClicked:{
                 parent.color = "#28000000";
                 embedHelper.Embed();
-                titleBar.isEmbeded = !titleBar.isEmbeded
             }
         }
     }

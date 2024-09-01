@@ -11,6 +11,7 @@ public:
 	static EmbedHelper* Init(QObject* _root);
 	Q_INVOKABLE void Embed();
 	Q_INVOKABLE void WinResized();
+	Q_INVOKABLE bool IsEmbed();
 private:
 
 };

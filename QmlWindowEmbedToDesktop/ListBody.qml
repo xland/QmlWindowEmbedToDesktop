@@ -47,7 +47,31 @@ Rectangle {
                 let pos = item.mapToItem(null, 0, 0);
                 if(y>pos.y && y<pos.y+item.height){
                     item.children[0].color = "#88ffffff"
-                    item.children[0].children[3].visible = true
+                    let btnBox = item.children[0].children[3]
+                    let editBtn = btnBox.children[1]
+                    let delBtn = btnBox.children[0]
+                    btnBox.visible = true
+                    if(x>pos.x+btnBox.x+delBtn.x && 
+                        x < pos.x+btnBox.x+delBtn.x+delBtn.width && 
+                        y > pos.y+btnBox.y+delBtn.y && 
+                        y < pos.y+btnBox.y+delBtn.y+delBtn.height){
+                        delBtn.color = "#BBFFFFFF"
+                        //delToolTip.visible = true
+                    }else{
+                        delBtn.color = "#00000000"
+                        //delToolTip.visible = false
+                    }
+                    if(x>pos.x+btnBox.x+editBtn.x && 
+                        x < pos.x+btnBox.x+editBtn.x+editBtn.width && 
+                        y > pos.y+btnBox.y+editBtn.y && 
+                        y < pos.y+btnBox.y+editBtn.y+editBtn.height){
+                        editBtn.color = "#BBFFFFFF"
+                        //editBtn.visible = true
+                    }else{
+                        editBtn.color = "#00000000"
+                        //editBtn.visible = false
+                    }
+
                 }else{
                     item.children[0].color = "#00000000"
                     item.children[0].children[3].visible = false
@@ -179,7 +203,7 @@ Rectangle {
                                 radius: 4
                             }
                             contentItem: Text {
-                                text: delToolTip.text
+                                text: editToolTip.text
                                 color: "#FFFFFFFF"
                             }
                         }

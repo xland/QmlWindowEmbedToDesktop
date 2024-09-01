@@ -10,12 +10,8 @@
 
 namespace {
 	HWND workerW{ nullptr };
-    HWND shellHwnd{ nullptr };
-    HWND desktopHwnd{ nullptr };
 	HWND tarHwnd{ nullptr };
-    HWND sysListView32HWND{ nullptr };
     bool isEmbeded{ false };
-    std::vector<wchar_t> buf(18);
     QQuickWindow* window;
     WNDPROC OldProc;
     RECT tarRect;
@@ -25,7 +21,7 @@ namespace {
 
 std::wstring GetWindowClassName(HWND hwnd)
 {
-    std::array<WCHAR, 16> className;
+    std::array<WCHAR, 36> className;
     GetClassName(hwnd, className.data(), (int)className.size());
     std::wstring title(className.data());
     return title;
@@ -61,6 +57,30 @@ void sendEvent(QObject* parent, QMouseEvent* event) {
     }
 }
 
+
+bool isMouseOnDesktop() {
+    POINT mousePos;
+    GetCursorPos(&mousePos);
+    auto flag = EnumWindows([](HWND hwnd, LPARAM lparam)
+        {
+            if (!IsWindowVisible(hwnd)) return TRUE;
+            POINT* p = (POINT*)lparam;
+            RECT rect;
+            GetWindowRect(hwnd, &rect);
+            if (p->x >= rect.left && p->x <= rect.right && p->y >= rect.top && p->y <= rect.bottom) {
+                WCHAR className[28];
+                int len = GetClassName(hwnd, className, 28);
+                if ((lstrcmp(TEXT("WorkerW"), className) != 0) &&
+                    (lstrcmp(TEXT("Progman"), className) != 0) &&
+                    (lstrcmp(TEXT("Windows.UI.Core.CoreWindow"), className) != 0)) {
+                    return FALSE;
+                }                
+            }
+            return TRUE;
+        }, (LPARAM)&mousePos);
+    return flag;
+}
+
 LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (uMsg == WM_INPUT && isEmbeded)
@@ -69,9 +89,7 @@ LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
         if (point.x < 0 && point.y < 0 && isEmbeded) {
             return 0;
         }
-        HWND curHwnd = WindowFromPoint(point);
-        auto cn = GetWindowClassName(curHwnd);
-        if (cn != L"SysListView32") {
+        if (!isMouseOnDesktop()) {
             return 0;
         }
         auto ratio = window->screen()->devicePixelRatio();
@@ -161,15 +179,14 @@ void EmbedHelper::Embed() {
     }
     else {
         if (!workerW) {
-            desktopHwnd = GetDesktopWindow();
-            shellHwnd = GetShellWindow();
+            auto desktopHwnd = GetDesktopWindow();
+            auto shellHwnd = GetShellWindow();
             SendMessage(shellHwnd, 0x052C, 0x0000000D, 0);
             SendMessage(shellHwnd, 0x052C, 0x0000000D, 1);
             EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
                 HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
                 if (shellDllDefView != nullptr) {
                     workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
-                    sysListView32HWND = FindWindowEx(shellDllDefView, NULL, L"SysListView32", NULL);
                 }
                 return TRUE;
                 }, NULL);
@@ -189,4 +206,9 @@ void EmbedHelper::Embed() {
 void EmbedHelper::WinResized()
 {
     GetWindowRect(tarHwnd, &tarRect);
+}
+
+bool EmbedHelper::IsEmbed()
+{
+    return isEmbeded;
 }
