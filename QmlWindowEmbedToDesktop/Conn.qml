@@ -39,8 +39,6 @@ WebSocket {
                 url = "ws://127.0.0.1"
                 conn.url = url;
                 conn.active = true;
-                dialogText.text = url;
-                dialog.visible = true;
                 break;
             }
         }

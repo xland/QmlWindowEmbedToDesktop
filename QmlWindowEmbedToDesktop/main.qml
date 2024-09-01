@@ -10,6 +10,8 @@ Window {
     visible: true
     width: 580
     height: 580  //580,860
+    x: 20
+    y: 20
     title: "QtEmbededWindow"
     function isMouseIn(ele,x,y){
         let pos = ele.mapToItem(null, 0, 0);
@@ -36,41 +38,27 @@ Window {
     function upFunc(x,y){
         listBody.mouseUp(x,y)
     }
-    function throttle(func, limit) {
-        let lastFunc;
-        let lastRan;    
-        return function(...args) {
-            const context = this;
-            if (!lastRan) {
-                func.apply(context, args);
-                lastRan = Date.now();
-            } else {
-                if (lastFunc) clearTimeout(lastFunc);
-                lastFunc = setTimeout(function() {
-                    if ((Date.now() - lastRan) >= limit) {
-                        func.apply(context, args);
-                        lastRan = Date.now();
-                    }
-                }, limit - (Date.now() - lastRan));
-            }
-        };
-    }
     function updateScreenInfo() {
+        if(isFirst < 2){ 
+            isFirst += 1
+            return;
+        }
         if (screenPixelRatio < 0) {
             screenPixelRatio = screen.devicePixelRatio
-            console.log("new screen")
+            console.log(222222);
         }else if(screenPixelRatio != screen.devicePixelRatio){
-           throttle(()=>{                
-                width = width/screenPixelRatio*screen.devicePixelRatio
-                height = height/screenPixelRatio*screen.devicePixelRatio
-                screenPixelRatio = screen.devicePixelRatio
-                console.log("new screen")
-            },1000)
+            width = width/screenPixelRatio*screen.devicePixelRatio
+            height = height/screenPixelRatio*screen.devicePixelRatio
+            screenPixelRatio = screen.devicePixelRatio
+            isInMainScreen = !isInMainScreen;
+            console.log(111111);
         }
     }
     property real screenPixelRatio:-1.0;
-    onXChanged:throttle(updateScreenInfo, 1000)
-    onYChanged:throttle(updateScreenInfo, 1000)
+    property bool isInMainScreen:true;
+    property int isFirst:-2;
+    onXChanged:updateScreenInfo();
+    onYChanged:updateScreenInfo();
     FontLoader {
         id: fontLoader
         source: "iconfont.ttf"
@@ -140,8 +128,18 @@ Window {
     Conn{
         id:conn    
     }
-    Component.onCompleted: {
-        x = Screen.width - width - 20
-        y = 20
+    Timer {
+        id: timeoutTimer
+        interval: 1000  // 设置超时时间为1000毫秒（1秒）
+        running: false  // 初始状态为不运行
+        repeat: false   // 只执行一次
+        onTriggered: {
+            console.log("Timeout reached!",screen.devicePixelRatio)
+            x = Screen.virtualX + Screen.width - width - 20
+            y = 20
+        }
+    }
+    Component.onCompleted: function(){
+        //console.log("asdfasdfasdfasdf",Screen.desktopAvailableWidth)
     }
 }

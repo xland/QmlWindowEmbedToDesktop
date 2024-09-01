@@ -7,9 +7,12 @@
 #include <qcoreapplication.h>
 #include <qscreen.h>
 #include <QScreen>
+#include <qwindow.h>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include "CustomWindow.h"
 
 namespace {
-	HWND workerW{ nullptr };
 	HWND tarHwnd{ nullptr };
     bool isEmbeded{ false };
     QQuickWindow* window;
@@ -19,13 +22,7 @@ namespace {
     qreal scaleFactor;
 }
 
-std::wstring GetWindowClassName(HWND hwnd)
-{
-    std::array<WCHAR, 36> className;
-    GetClassName(hwnd, className.data(), (int)className.size());
-    std::wstring title(className.data());
-    return title;
-}
+
 
 void LogMessage(const std::string&& message) {
     OutputDebugStringA(message.c_str());
@@ -56,29 +53,18 @@ void sendEvent(QObject* parent, QMouseEvent* event) {
         }
     }
 }
-
-
 bool isMouseOnDesktop() {
     POINT mousePos;
     GetCursorPos(&mousePos);
-    auto flag = EnumWindows([](HWND hwnd, LPARAM lparam)
-        {
-            if (!IsWindowVisible(hwnd)) return TRUE;
-            POINT* p = (POINT*)lparam;
-            RECT rect;
-            GetWindowRect(hwnd, &rect);
-            if (p->x >= rect.left && p->x <= rect.right && p->y >= rect.top && p->y <= rect.bottom) {
-                WCHAR className[28];
-                int len = GetClassName(hwnd, className, 28);
-                if ((lstrcmp(TEXT("WorkerW"), className) != 0) &&
-                    (lstrcmp(TEXT("Progman"), className) != 0) &&
-                    (lstrcmp(TEXT("Windows.UI.Core.CoreWindow"), className) != 0)) {
-                    return FALSE;
-                }                
-            }
-            return TRUE;
-        }, (LPARAM)&mousePos);
-    return flag;
+    HWND hwnd = WindowFromPoint(mousePos);
+    WCHAR className[28];
+    int len = GetClassName(hwnd, className, 28);
+    if ((lstrcmp(TEXT("SysListView32"), className) == 0)||
+        (lstrcmp(TEXT("WorkerW"), className) == 0) ||
+        (lstrcmp(TEXT("Progman"), className) == 0)) {
+        return true;
+    }
+    return false;
 }
 
 LRESULT CALLBACK handleWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -159,14 +145,18 @@ void roteInput()
     OldProc = (WNDPROC)SetWindowLongPtr(tarHwnd, GWLP_WNDPROC, (LONG_PTR)handleWindowMessage);
 }
 
-
 EmbedHelper::~EmbedHelper()
 {
 }
 
 EmbedHelper* EmbedHelper::Init(QObject* _root) {
+
     window = static_cast<QQuickWindow*>(_root);
     tarHwnd = (HWND)window->winId();
+    HWND hDesktop = GetDesktopWindow();
+    SetParent(tarHwnd, hDesktop);
+    SetWindowLong(tarHwnd, GWL_EXSTYLE, GetWindowLong(tarHwnd, GWL_EXSTYLE) | WS_EX_TOPMOST);
+    SetWindowPos(tarHwnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     instance = new EmbedHelper(_root);
     return instance;
 }
@@ -178,22 +168,23 @@ void EmbedHelper::Embed() {
         isEmbeded = false;
     }
     else {
-        if (!workerW) {
-            auto desktopHwnd = GetDesktopWindow();
-            auto shellHwnd = GetShellWindow();
-            SendMessage(shellHwnd, 0x052C, 0x0000000D, 0);
-            SendMessage(shellHwnd, 0x052C, 0x0000000D, 1);
-            EnumWindows([](HWND topHandle, LPARAM topParamHandle) {
-                HWND shellDllDefView = FindWindowEx(topHandle, nullptr, L"SHELLDLL_DefView", nullptr);
-                if (shellDllDefView != nullptr) {
-                    workerW = FindWindowEx(nullptr, topHandle, L"WorkerW", nullptr);
-                }
-                return TRUE;
-                }, NULL);
-        }
+        HWND progman = FindWindow(L"Progman", NULL);
+        SendMessageTimeout(progman, 0x052C, 0, 0, SMTO_NORMAL, 1000, NULL);
+        HWND workerW{ nullptr };
+        EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL {
+            HWND defView = FindWindowEx(hwnd, NULL, L"SHELLDLL_DefView", NULL);
+            if (defView != NULL) {
+                HWND* ww = (HWND*)lParam;
+                *ww = FindWindowEx(NULL, hwnd, L"WorkerW", NULL);
+            }
+            return TRUE;
+            }, (LPARAM)&workerW);
         SetParent(tarHwnd, workerW);
-        roteInput();
         GetWindowRect(tarHwnd, &tarRect);
+
+        //auto l = tarRect.left / 1.5;
+        //auto t = tarRect.top / 1.5;
+        roteInput();  //4040  1038
         isEmbeded = true;
 
         //DWORD workerWThreadId = GetWindowThreadProcessId(sysListView32HWND, nullptr);

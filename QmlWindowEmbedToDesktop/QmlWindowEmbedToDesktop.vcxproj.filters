@@ -74,5 +74,8 @@
     <QtMoc Include="EmbedHelper.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="CustomWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
