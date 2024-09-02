@@ -30,7 +30,6 @@ Window {
     }
     function downFunc(x,y){
         titleBar.mouseDown(x,y)
-        listBody.mouseDown(x,y)
         calendarHeader.mouseDown(x,y)
         calendarBody.mouseDown(x,y)
         switchBtn.mouseDown(x,y)

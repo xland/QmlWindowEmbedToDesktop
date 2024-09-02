@@ -25,6 +25,7 @@ Rectangle {
         }
         switchBtn.color = "#00000000";
         embedHelper.WinResized();
+        conn.send({ msgType: 'EmbedCalendar',msgName: 'displayScheduleList',data: list.visible})
     }
     anchors.right:bg.right
     anchors.rightMargin:26

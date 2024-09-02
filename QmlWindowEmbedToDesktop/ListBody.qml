@@ -6,9 +6,9 @@ Rectangle {
     property var listBodyData:[]
     property real totalHeight:0
     property real position: 0
-    property bool mouseInFlag:false
     property bool mouseInThumb:false
     property real mouseDownThumbY:-1000
+    property int mouseInRownIndex:-1
     function wheelFunc(flag,x,y){
         if(isMouseIn(listBody,x,y)){
             listBody.position += flag ? -0.1 : 0.1
@@ -16,7 +16,17 @@ Rectangle {
         }
     }
     function mouseDown(x,y){
-        if(isMouseIn(thumb,x,y)){
+        if(mouseInRownIndex != -1){
+            let {scheduleNo,calendarNo,hoverDelBtn,hoverEditBtn} = listRepeater.itemAt(mouseInRownIndex);
+            if(hoverDelBtn){
+                conn.send({ msgType: 'EmbedCalendar',msgName: 'deleteSchedule',
+                            data: {scheduleNo,calendarNo}})
+            }
+            if(hoverEditBtn){
+                conn.send({ msgType: 'EmbedCalendar',msgName: 'updateSchedule',
+                            data: {scheduleNo,calendarNo}})
+            }
+        }else if(isMouseIn(thumb,x,y)){
             mouseDownThumbY = y;
         }
     }
@@ -41,11 +51,11 @@ Rectangle {
             mouseInThumb = false;            
         }
         if(isMouseIn(listBody,x,y)){
-            mouseInFlag = true
             for(let i=0;i<listRepeater.count;i++){
                 let item = listRepeater.itemAt(i)
                 let pos = item.mapToItem(null, 0, 0);
                 if(y>pos.y && y<pos.y+item.height){
+                    mouseInRownIndex = i;
                     item.children[0].color = "#88ffffff"
                     let btnBox = item.children[0].children[3]
                     let editBtn = btnBox.children[1]
@@ -56,9 +66,11 @@ Rectangle {
                         y > pos.y+btnBox.y+delBtn.y && 
                         y < pos.y+btnBox.y+delBtn.y+delBtn.height){
                         delBtn.color = "#BBFFFFFF"
+                        item.hoverDelBtn = true
                         //delToolTip.visible = true
                     }else{
                         delBtn.color = "#00000000"
+                        item.hoverDelBtn = false
                         //delToolTip.visible = false
                     }
                     if(x>pos.x+btnBox.x+editBtn.x && 
@@ -66,19 +78,20 @@ Rectangle {
                         y > pos.y+btnBox.y+editBtn.y && 
                         y < pos.y+btnBox.y+editBtn.y+editBtn.height){
                         editBtn.color = "#BBFFFFFF"
+                        item.hoverEditBtn = true
                         //editBtn.visible = true
                     }else{
                         editBtn.color = "#00000000"
+                        item.hoverEditBtn = false
                         //editBtn.visible = false
                     }
-
                 }else{
                     item.children[0].color = "#00000000"
                     item.children[0].children[3].visible = false
                 }
             }
-        }else if(mouseInFlag){
-            mouseInFlag = false
+        }else if(mouseInRownIndex > -1){
+            mouseInRownIndex = -1
             for(let i=0;i<listRepeater.count;i++){
                 let item = listRepeater.itemAt(i)
                 item.children[0].color = "#00000000"
@@ -102,6 +115,10 @@ Rectangle {
         id:listRepeater
         model: listBodyData
         delegate: Rectangle {
+            property string scheduleNo:modelData.scheduleNo
+            property string calendarNo:modelData.calendarNo
+            property bool hoverDelBtn:false
+            property bool hoverEditBtn:false
             y:-listBody.position * (totalHeight - listBody.height) + 56 * index
             width: parent.width
             height:56
@@ -224,6 +241,16 @@ Rectangle {
                         parent.color = "#88ffffff";
                         btnBox.visible = true;
                     }
+                    onPressed: {
+                        if(hoverDelBtn){
+                            conn.send({ msgType: 'EmbedCalendar',msgName: 'deleteSchedule',
+                            data: {scheduleNo,calendarNo}})
+                        }
+                        if(hoverEditBtn){
+                            conn.send({ msgType: 'EmbedCalendar',msgName: 'updateSchedule',
+                            data: {scheduleNo,calendarNo}})
+                        }                        
+                    }
                     onPositionChanged:function(mouse){
                         if(mouse.x>btnBox.x+delBtn.x && 
                             mouse.x < btnBox.x+delBtn.x+delBtn.width && 
@@ -231,9 +258,11 @@ Rectangle {
                             mouse.y < btnBox.y+delBtn.y+delBtn.height){
                             delBtn.color = "#BBFFFFFF"
                             delToolTip.visible = true
+                            hoverDelBtn = true
                         }else{
                             delBtn.color = "#00000000"
                             delToolTip.visible = false
+                            hoverDelBtn = false
                         }
                         if(mouse.x>btnBox.x+editBtn.x && 
                             mouse.x < btnBox.x+editBtn.x+editBtn.width && 
@@ -241,9 +270,11 @@ Rectangle {
                             mouse.y < btnBox.y+editBtn.y+editBtn.height){
                             editBtn.color = "#BBFFFFFF"
                             editToolTip.visible = true
+                            hoverEditBtn = true
                         }else{
                             editBtn.color = "#00000000"
                             editToolTip.visible = false
+                            hoverEditBtn = false
                         }
                     }
                     onExited: {
