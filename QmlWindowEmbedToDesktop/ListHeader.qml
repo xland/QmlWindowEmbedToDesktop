@@ -2,16 +2,30 @@ import QtQuick
 import QtQuick.Controls
 
 Rectangle {
+    function mouseMove(x,y){
+        if(isMouseIn(addBtn,x,y)){
+            addBtn.color = "#BBFFFFFF";
+        } else {
+            addBtn.color = "#00000000";
+        }
+    }
+    function mouseDown(x,y){
+        if(isMouseIn(addBtn,x,y)){
+            conn.send({ msgType: 'EmbedCalendar',msgName: 'createSchedule'})
+        }
+    }
 	width:parent.width
 	height:32 
     color:"#00000000"
+    property string todayStr:""
     Text{
         color:"#FF1F2329"
         font.pixelSize: 24
         anchors.verticalCenter: parent.verticalCenter
-        text: "今天 7月19日"
+        text: todayStr
     }
     Rectangle {
+        id:addBtn
         anchors.right: parent.right
         width:parent.height
         height:parent.height
@@ -51,7 +65,8 @@ Rectangle {
             onExited: {
                 parent.color = "#00000000";
             }
-            onPressed: {           
+            onPressed: {  
+                conn.send({ msgType: 'EmbedCalendar',msgName: 'createSchedule'})
             }
         }
     }

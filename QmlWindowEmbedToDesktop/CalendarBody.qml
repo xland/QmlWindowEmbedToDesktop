@@ -30,6 +30,15 @@ Repeater {
         let {year,month,date} = model[hoverIndex]
         conn.send({ msgType: 'EmbedCalendar',msgName: 'changeDate',data: {year,month,date}})
     }
+    function getTextColor(data){
+        if(data.isActive){
+            return "#FFFFFFFF"
+        }else if(data.type === "currt"){
+            return "#FF1F2329"
+        }else{
+            return "#FF666666"
+        }
+    }
     Rectangle {
         x:(index%7)*(body.width/7)+11
         height:57
@@ -43,7 +52,7 @@ Repeater {
             height:55
             width:55
             radius:width
-            color:"#00000000"
+            color:modelData.isActive?"#FFF02C38":"#00000000"
             border {
                 width: 1
                 color: modelData.isToday?"#FFF02C38":"#00000000"
@@ -55,9 +64,11 @@ Repeater {
                 property int month:modelData.month;
                 property int date:modelData.date;
                 onEntered: {
+                    if(modelData.isActive) return;
                     parent.color = "#88FFFFFF";
                 }
                 onExited: {
+                    if(modelData.isActive) return;
                     parent.color = "#00000000";
                 }
                 onPressed: {
@@ -66,7 +77,7 @@ Repeater {
             }
             Text{
                 id:dayNumText
-                color:modelData.type === 'currt'? "#FF1F2329":"#FF666666"
+                color:getTextColor(modelData)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 6
@@ -75,7 +86,7 @@ Repeater {
             }
             Text{
                 id:dayText
-                color:"#FF4C4F54"
+                color:getTextColor(modelData)
                 anchors.top: dayNumText.bottom
                 anchors.topMargin: -3
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -83,7 +94,7 @@ Repeater {
                 text:modelData.lunarInfo
             }
             Text{
-                color:"#FFFF0000"
+                color:getTextColor(modelData)
                 font.pixelSize: 10
                 anchors.top: parent.top
                 anchors.right: parent.right
@@ -96,8 +107,9 @@ Repeater {
                 width:6
                 anchors.top: dayText.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                color:"#FF797B7F"
+                color:getTextColor(modelData)
                 radius:6
+                visible:modelData.hasSchdule
             }
         }
     }

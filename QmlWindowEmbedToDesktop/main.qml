@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
 
-
 Window {
     id:root
     flags: Qt.FramelessWindowHint
@@ -26,13 +25,16 @@ Window {
         calendarHeader.mouseMove(x,y)
         calendarBody.mouseMove(x,y)
         switchBtn.mouseMove(x,y)
+        listHeader.mouseMove(x,y)
         listBody.mouseMove(x,y)
+
     }
     function downFunc(x,y){
         titleBar.mouseDown(x,y)
         calendarHeader.mouseDown(x,y)
         calendarBody.mouseDown(x,y)
         switchBtn.mouseDown(x,y)
+        listHeader.mouseDown(x,y)
         listBody.mouseDown(x,y)
     }
     function upFunc(x,y){
