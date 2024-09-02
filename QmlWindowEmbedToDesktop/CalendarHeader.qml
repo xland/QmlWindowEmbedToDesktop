@@ -9,23 +9,31 @@ Rectangle {
     width:270
     height:40
     property string yearMonthText
-    function setYearMonth(curDate){
-
-    }
+    property int mouseInBtn:0
     function mouseMove(x,y){
         if(isMouseIn(goPreMonthBtn,x,y)){
             goPreMonthBtn.color = "#4bffffff";
+            mouseInBtn = 1
         } else {
             goPreMonthBtn.color = "#00000000";
+            mouseInBtn = 0
         }
         if(isMouseIn(goNextMonthBtn,x,y)){
             goNextMonthBtn.color = "#4bffffff";
+            mouseInBtn = 2
         } else {
             goNextMonthBtn.color = "#00000000";
+            mouseInBtn = 0
         }
     }
     function mouseDown(x,y){
-        
+        if(mouseInBtn === 0){
+            return;
+        }else if(mouseInBtn === 1){
+            conn.send({msgType: 'EmbedCalendar',msgName: 'changePrevMonth'})
+        }else if(mouseInBtn === 2){
+            conn.send({msgType: 'EmbedCalendar',msgName: 'changeNextMonth'})
+        }
     }
     component IconBtn: Rectangle {
         property string iconCode:"\ue709"
@@ -83,7 +91,7 @@ Rectangle {
         id:goPreMonthBtn
         anchors.left: parent.left
         onClicked: {
-            calendarBody.roteMonth(-1);
+            conn.send({msgType: 'EmbedCalendar',msgName: 'changePrevMonth'})
         }
     }
     Rectangle {
@@ -106,10 +114,7 @@ Rectangle {
         iconCode:"\ue746"
         toolTipText:"下个月"
         onClicked: {
-            calendarBody.roteMonth(1);
+            conn.send({msgType: 'EmbedCalendar',msgName: 'changeNextMonth'})
         }
-    }
-    Component.onCompleted: {
-        calendarBody.roteMonth(0);
     }
 }

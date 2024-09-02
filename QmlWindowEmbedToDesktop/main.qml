@@ -32,6 +32,7 @@ Window {
         titleBar.mouseDown(x,y)
         listBody.mouseDown(x,y)
         calendarHeader.mouseDown(x,y)
+        calendarBody.mouseDown(x,y)
         switchBtn.mouseDown(x,y)
         listBody.mouseDown(x,y)
     }
@@ -45,7 +46,6 @@ Window {
         }
         if (screenPixelRatio < 0) {
             screenPixelRatio = screen.devicePixelRatio
-            console.log(222222);
         }else if(screenPixelRatio != screen.devicePixelRatio){
             width = width/screenPixelRatio*screen.devicePixelRatio
             height = height/screenPixelRatio*screen.devicePixelRatio
@@ -128,18 +128,7 @@ Window {
     Conn{
         id:conn    
     }
-    Timer {
-        id: timeoutTimer
-        interval: 1000  // 设置超时时间为1000毫秒（1秒）
-        running: false  // 初始状态为不运行
-        repeat: false   // 只执行一次
-        onTriggered: {
-            console.log("Timeout reached!",screen.devicePixelRatio)
-            x = Screen.virtualX + Screen.width - width - 20
-            y = 20
-        }
-    }
     Component.onCompleted: function(){
-        //console.log("asdfasdfasdfasdf",Screen.desktopAvailableWidth)
+        console.log("asdfasdfasdfasdf",Screen.desktopAvailableWidth)
     }
 }

@@ -153,10 +153,10 @@ EmbedHelper* EmbedHelper::Init(QObject* _root) {
 
     window = static_cast<QQuickWindow*>(_root);
     tarHwnd = (HWND)window->winId();
-    HWND hDesktop = GetDesktopWindow();
-    SetParent(tarHwnd, hDesktop);
-    SetWindowLong(tarHwnd, GWL_EXSTYLE, GetWindowLong(tarHwnd, GWL_EXSTYLE) | WS_EX_TOPMOST);
-    SetWindowPos(tarHwnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+    //HWND hDesktop = GetDesktopWindow();
+    //SetParent(tarHwnd, hDesktop);
+    //SetWindowLong(tarHwnd, GWL_EXSTYLE, GetWindowLong(tarHwnd, GWL_EXSTYLE) | WS_EX_TOPMOST);
+    //SetWindowPos(tarHwnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     instance = new EmbedHelper(_root);
     return instance;
 }

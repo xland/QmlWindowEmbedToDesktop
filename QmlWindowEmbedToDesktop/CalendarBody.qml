@@ -4,9 +4,6 @@ Repeater {
     id:calendarBody
     model: []
     property int hoverIndex:-1
-    function roteMonth(val){
-        //model = Calendar.getOneMonthDate(val);
-    }
     function mouseMove(x,y){
         if(x < 16 || x>root.width-16 || y < 146 || y> 490){            
             if(hoverIndex != -1){
@@ -27,6 +24,11 @@ Repeater {
                 }
             }
         }
+    }
+    function mouseDown(x,y){
+        if(hoverIndex < 0) return;
+        let {year,month,date} = model[hoverIndex]
+        conn.send({ msgType: 'EmbedCalendar',msgName: 'changeDate',data: {year,month,date}})
     }
     Rectangle {
         x:(index%7)*(body.width/7)+11
@@ -49,11 +51,17 @@ Repeater {
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
+                property int year:modelData.year;
+                property int month:modelData.month;
+                property int date:modelData.date;
                 onEntered: {
                     parent.color = "#88FFFFFF";
                 }
                 onExited: {
                     parent.color = "#00000000";
+                }
+                onPressed: {
+                    conn.send({ msgType: 'EmbedCalendar',msgName: 'changeDate',data: {year,month,date}})
                 }
             }
             Text{
