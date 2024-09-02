@@ -6,7 +6,7 @@ Window {
     id:root
     flags: Qt.FramelessWindowHint
     color: "#00000000"
-    visible: true
+    visible: false
     width: 580
     height: 580  //580,860
     x: 20
@@ -27,7 +27,6 @@ Window {
         switchBtn.mouseMove(x,y)
         listHeader.mouseMove(x,y)
         listBody.mouseMove(x,y)
-
     }
     function downFunc(x,y){
         titleBar.mouseDown(x,y)
@@ -60,6 +59,9 @@ Window {
     property int isFirst:-2;
     onXChanged:updateScreenInfo();
     onYChanged:updateScreenInfo();
+    Skin{
+        id:skin
+    }
     FontLoader {
         id: fontLoader
         source: "iconfont.ttf"
@@ -68,10 +70,10 @@ Window {
         id: bg
         x: 0
         y: 0
+        color:skin.bg
         width: parent.width
         height: parent.height
         radius: 4
-        color: "#BBEEEEEE"  
         antialiasing:true
         border {
             width: 0.5
@@ -123,13 +125,12 @@ Window {
             id: switchBtn
         }
     }
-    ToolTip{
-        id:toolTip
+    SettingMenu{
+        id:settingMenu
     }
     Conn{
         id:conn    
     }
     Component.onCompleted: function(){
-        console.log("asdfasdfasdfasdf",Screen.desktopAvailableWidth)
     }
 }

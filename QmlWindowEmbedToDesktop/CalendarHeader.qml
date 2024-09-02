@@ -47,10 +47,10 @@ Rectangle {
         signal clicked()
         border {
             width: 0.6
-            color: "#ff797B7F"
+            color: skin.text1
         }
         Text{
-            color:"#ff4C4F54"
+            color:skin.text0
             font.family: fontLoader.name
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
@@ -64,12 +64,12 @@ Rectangle {
             delay: 600
             timeout: 6000
             background: Rectangle {
-                color: "#FF1A1A1A"
+                color: skin.toolTipBg
                 radius: 4
             }
             contentItem: Text {
                 text: toolTip.text
-                color: "#FFFFFFFF"
+                color: skin.toolTipText
             }
         }
         MouseArea {
@@ -101,7 +101,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         color: "#00000000"
         Text{
-            color:"#FF1F2329"
+            color:skin.text0
             font.pixelSize: 28
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter

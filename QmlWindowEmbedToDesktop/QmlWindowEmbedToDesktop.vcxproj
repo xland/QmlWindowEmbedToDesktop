@@ -116,10 +116,11 @@
     <None Include="Conn.qml" />
     <None Include="ListBody.qml" />
     <None Include="ListHeader.qml" />
+    <None Include="SettingMenu.qml" />
+    <None Include="Skin.qml" />
     <None Include="SwitchBtn.qml" />
     <None Include="TitleBar.qml" />
     <None Include="todo.md" />
-    <None Include="ToolTip.qml" />
     <None Include="WeekHeader.qml" />
     <QtRcc Include="qml.qrc" />
     <None Include="main.qml" />

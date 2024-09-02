@@ -19,7 +19,7 @@ Rectangle {
     color:"#00000000"
     property string todayStr:""
     Text{
-        color:"#FF1F2329"
+        color:skin.text0
         font.pixelSize: 24
         anchors.verticalCenter: parent.verticalCenter
         text: todayStr
@@ -38,12 +38,12 @@ Rectangle {
             delay: 600
             timeout: 6000
             background: Rectangle {
-                color: "#FF1A1A1A"
+                color: skin.toolTipBg
                 radius: 4
             }
             contentItem: Text {
                 text: toolTip.text
-                color: "#FFFFFFFF"
+                color: skin.toolTipText
             }
         }
         Text{

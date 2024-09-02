@@ -16,11 +16,9 @@ Rectangle {
         } else {
             settingBtn.color = "#00000000";
         }
-        if(embedHelper.IsEmbed()) return;
         if(isMouseIn(pin,x,y)){
-            pin.color = "#28000000";
-        } else {
-            pin.color = "#00000000";
+            toolTip.text = "取消嵌入"
+            toolTip.visible = true;
         }
     }
     function mouseDown(x,y){
@@ -46,7 +44,7 @@ Rectangle {
         color: "#00000000"
         antialiasing:true
         Text{
-            color:"#FF646A73";
+            color:skin.text1;
             font.family: fontLoader.name
             font.pixelSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
@@ -63,7 +61,7 @@ Rectangle {
                 parent.color = "#00000000";
             }
             onClicked:{
-                Qt.quit();
+                settingMenu.show();
             }
         }
     }
@@ -78,22 +76,22 @@ Rectangle {
         color: "#00000000"
         ToolTip {
             id:toolTip
-            text: "无法在副屏上把窗口置于桌面图标之下 \n 除此之外，其他功能都可正常使用"
+            text: "嵌入"
             visible: false
             delay: 600
-            timeout: 6000
+            timeout: 2000
             background: Rectangle {
-                color: "#FF1A1A1A"
+                color: skin.toolTipBg
                 radius: 4
             }
             contentItem: Text {
                 text: toolTip.text
-                color: "#FFFFFFFF"
+                color: skin.toolTipText
             }
         }
         Text{
             id:pinIcon
-            color:"#FF646A73";
+            color:skin.text1;
             font.family: fontLoader.name
             font.pixelSize: 12
             anchors.horizontalCenter: parent.horizontalCenter
@@ -104,11 +102,17 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                if(isPinInScreen2 || embedHelper.IsEmbed()) return;
+                //if(isPinInScreen2 || embedHelper.IsEmbed()) return;
+                if(embedHelper.IsEmbed()){
+                    return;
+                }
+                toolTip.text = "嵌入"
+                toolTip.visible = true;
                 parent.color = "#28000000";
             }
             onExited: {
-                if(isPinInScreen2 || embedHelper.IsEmbed()) return;
+                //if(isPinInScreen2 || embedHelper.IsEmbed()) return;
+                if(embedHelper.IsEmbed()) return;
                 parent.color = "#00000000";
             }
             onClicked:{

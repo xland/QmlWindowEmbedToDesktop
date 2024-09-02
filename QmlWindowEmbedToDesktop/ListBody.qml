@@ -17,14 +17,16 @@ Rectangle {
     }
     function mouseDown(x,y){
         if(mouseInRownIndex != -1){
-            let {scheduleNo,calendarNo,hoverDelBtn,hoverEditBtn} = listRepeater.itemAt(mouseInRownIndex);
-            if(hoverDelBtn){
-                conn.send({ msgType: 'EmbedCalendar',msgName: 'deleteSchedule',
-                            data: {scheduleNo,calendarNo}})
-            }
-            if(hoverEditBtn){
-                conn.send({ msgType: 'EmbedCalendar',msgName: 'updateSchedule',
-                            data: {scheduleNo,calendarNo}})
+            let {scheduleNo,calendarNo,hoverDelBtn,hoverEditBtn,isAllowEdit} = listRepeater.itemAt(mouseInRownIndex);
+            if(isAllowEdit){
+                if(hoverDelBtn){
+                    conn.send({ msgType: 'EmbedCalendar',msgName: 'deleteSchedule',
+                                data: {scheduleNo,calendarNo}})
+                }
+                if(hoverEditBtn){
+                    conn.send({ msgType: 'EmbedCalendar',msgName: 'updateSchedule',
+                                data: {scheduleNo,calendarNo}})
+                }            
             }
         }else if(isMouseIn(thumb,x,y)){
             mouseDownThumbY = y;
@@ -57,6 +59,7 @@ Rectangle {
                 if(y>pos.y && y<pos.y+item.height){
                     mouseInRownIndex = i;
                     item.children[0].color = "#88ffffff"
+                    if(!item.isAllowEdit) continue;
                     let btnBox = item.children[0].children[3]
                     let editBtn = btnBox.children[1]
                     let delBtn = btnBox.children[0]
@@ -117,6 +120,7 @@ Rectangle {
         delegate: Rectangle {
             property string scheduleNo:modelData.scheduleNo
             property string calendarNo:modelData.calendarNo
+            property bool isAllowEdit:modelData.isAllowEdit
             property bool hoverDelBtn:false
             property bool hoverEditBtn:false
             y:-listBody.position * (totalHeight - listBody.height) + 56 * index
@@ -145,7 +149,7 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.leftMargin: 8
                     anchors.rightMargin: 8
-                    color:"#FF1F2329"
+                    color:skin.text0
                     elide: Text.ElideRight
                     text: modelData.title
                 }
@@ -157,7 +161,7 @@ Rectangle {
                     anchors.leftMargin: 8
                     anchors.rightMargin: 8
                     font.pixelSize: 14
-                    color:"#FF666666"
+                    color:skin.text2
                     elide: Text.ElideRight
                     text: modelData.desc
                 }
@@ -185,19 +189,19 @@ Rectangle {
                             delay: 600
                             timeout: 6000
                             background: Rectangle {
-                                color: "#FF1A1A1A"
+                                color: skin.toolTipBg
                                 radius: 4
                             }
                             contentItem: Text {
                                 text: delToolTip.text
-                                color: "#FFFFFFFF"
+                                color: skin.toolTipText
                             }
                         }
                         Text {
                             font.family: fontLoader.name
                             anchors.centerIn: parent
                             font.pixelSize: 14
-                            color:"#FF333333"
+                            color:skin.text1
                             text: "\ue712"
                         }
                     }
@@ -216,19 +220,19 @@ Rectangle {
                             delay: 600
                             timeout: 6000
                             background: Rectangle {
-                                color: "#FF1A1A1A"
+                                color: skin.toolTipBg
                                 radius: 4
                             }
                             contentItem: Text {
                                 text: editToolTip.text
-                                color: "#FFFFFFFF"
+                                color: skin.toolTipText
                             }
                         }
                         Text {
                             font.family: fontLoader.name
                             anchors.centerIn: parent
                             font.pixelSize: 14
-                            color:"#FF333333"
+                            color:skin.text1
                             text: "\ue707"
                         }
                     }
@@ -238,10 +242,12 @@ Rectangle {
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: {
-                        parent.color = "#88ffffff";
+                        parent.color = "#33ffffff";
+                        if(!modelData.isAllowEdit) return;
                         btnBox.visible = true;
                     }
                     onPressed: {
+                        if(!modelData.isAllowEdit) return;
                         if(hoverDelBtn){
                             conn.send({ msgType: 'EmbedCalendar',msgName: 'deleteSchedule',
                             data: {scheduleNo,calendarNo}})
@@ -252,6 +258,7 @@ Rectangle {
                         }                        
                     }
                     onPositionChanged:function(mouse){
+                        if(!modelData.isAllowEdit) return;
                         if(mouse.x>btnBox.x+delBtn.x && 
                             mouse.x < btnBox.x+delBtn.x+delBtn.width && 
                             mouse.y > btnBox.y+delBtn.y && 

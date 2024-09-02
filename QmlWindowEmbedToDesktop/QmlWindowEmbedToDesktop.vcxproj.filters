@@ -63,7 +63,10 @@
     <None Include="Conn.qml">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="ToolTip.qml">
+    <None Include="SettingMenu.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Skin.qml">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

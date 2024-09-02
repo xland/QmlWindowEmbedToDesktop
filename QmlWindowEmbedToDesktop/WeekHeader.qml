@@ -9,7 +9,7 @@ Repeater {
         color:"#00000000"
         anchors.top: body.top
         Text{
-            color:"#ff4C4F54"
+            color:skin.text1
             font.pixelSize: 20
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter

@@ -34,9 +34,9 @@ Repeater {
         if(data.isActive){
             return "#FFFFFFFF"
         }else if(data.type === "currt"){
-            return "#FF1F2329"
+            return skin.text0
         }else{
-            return "#FF666666"
+            return skin.text2
         }
     }
     Rectangle {
@@ -80,13 +80,13 @@ Repeater {
                 color:getTextColor(modelData)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 6
+                anchors.topMargin: 4
                 font.pixelSize: 20
                 text:modelData.date
             }
             Text{
                 id:dayText
-                color:getTextColor(modelData)
+                color:modelData.isActive?"#FFFFFF":skin.text1
                 anchors.top: dayNumText.bottom
                 anchors.topMargin: -3
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -109,7 +109,7 @@ Repeater {
                 anchors.horizontalCenter: parent.horizontalCenter
                 color:getTextColor(modelData)
                 radius:6
-                visible:modelData.hasSchdule
+                visible:(modelData.hasSchdule===true)
             }
         }
     }
