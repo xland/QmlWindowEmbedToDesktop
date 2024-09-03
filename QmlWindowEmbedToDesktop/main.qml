@@ -49,8 +49,8 @@ Window {
     property real screenPixelRatio:-1.0;
     property bool isInMainScreen:true;
     property int isFirst:-2;
-    onXChanged:updateScreenInfo();
-    onYChanged:updateScreenInfo();    
+    //onXChanged:updateScreenInfo();
+    //onYChanged:updateScreenInfo();    
     flags: Qt.FramelessWindowHint
     color: "#00000000"
     visible: true
@@ -130,7 +130,5 @@ Window {
     }
     Conn{
         id:conn    
-    }
-    Component.onCompleted: function(){
     }
 }
