@@ -4,14 +4,6 @@ import QtQuick.Window
 
 Window {
     id:root
-    flags: Qt.FramelessWindowHint
-    color: "#00000000"
-    visible: false
-    width: 580
-    height: 580  //580,860
-    x: 20
-    y: 20
-    title: "QtEmbededWindow"
     function isMouseIn(ele,x,y){
         let pos = ele.mapToItem(null, 0, 0);
         let flag = (x>pos.x && x < pos.x+ele.width && y>pos.y && y<pos.y+ele.height)
@@ -58,7 +50,15 @@ Window {
     property bool isInMainScreen:true;
     property int isFirst:-2;
     onXChanged:updateScreenInfo();
-    onYChanged:updateScreenInfo();
+    onYChanged:updateScreenInfo();    
+    flags: Qt.FramelessWindowHint
+    color: "#00000000"
+    visible: true
+    width: 580
+    height: 580  //580,860
+    x: 20
+    y: 20
+    title: "QtEmbededWindow"
     Skin{
         id:skin
     }

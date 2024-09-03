@@ -14,7 +14,7 @@ Rectangle {
     y:38
     anchors.right:parent.right    
     anchors.rightMargin: 10
-    color: "#EDEEEE"
+    color: skin.menuBg
     z:666
     radius:4
     visible:false    
@@ -45,6 +45,7 @@ Rectangle {
         color:"#00000000"
         Text {
             anchors.centerIn: parent
+            color:skin.menuText
             text: "设置"
         }
         MouseArea {
@@ -53,7 +54,7 @@ Rectangle {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onEntered: {
-                parent.color = "#E0E0E0";
+                parent.color = skin.menuHover;
                 settingMenu.hoverTime = Date.now();
             }
             onExited: {
@@ -77,6 +78,7 @@ Rectangle {
         color:"#00000000"
         Text {
             anchors.centerIn: parent
+            color:skin.menuText
             text: "帮助中心"
         }
         MouseArea {
@@ -85,7 +87,7 @@ Rectangle {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onEntered: {
-                parent.color = "#E0E0E0";
+                parent.color = skin.menuHover;
                 settingMenu.hoverTime = Date.now();
             }
             onExited: {
@@ -109,6 +111,7 @@ Rectangle {
         color:"#00000000"
         Text {
             anchors.centerIn: parent
+            color:skin.menuText
             text: "建议反馈"
         }
         MouseArea {
@@ -117,7 +120,7 @@ Rectangle {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onEntered: {
-                parent.color = "#E0E0E0";
+                parent.color = skin.menuHover;
                 settingMenu.hoverTime = Date.now();
             }
             onExited: {
@@ -141,6 +144,7 @@ Rectangle {
         color:"#00000000"
         Text {
             anchors.centerIn: parent
+            color:skin.menuText
             text: "退出"
         }
         MouseArea {
@@ -149,7 +153,7 @@ Rectangle {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onEntered: {
-                parent.color = "#E0E0E0";
+                parent.color = skin.menuHover;
                 settingMenu.hoverTime = Date.now();
             }
             onExited: {
